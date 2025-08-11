@@ -1,0 +1,356 @@
+{
+  "version": "fe-spec-1.1",
+  "updated_at": "2025-08-11",
+  "project": {
+    "name": "BLRB",
+    "purpose_blurb": "BLRB is the newsletter for builders—short, sharp daily insights on the biggest tech moves, plus ideas you can act on. Mobile-first, no archive: just today.",
+    "scope": "FRONTEND_ONLY (this spec deliberately excludes backend, ETL, and AI details).",
+    "north_star": "Fast, clean daily front page with tappable explainers (BLRB panel) that feel instant."
+  },
+  "brand": {
+    "domain": "blrb.tech",
+    "colors": {
+      "primary": "#00b4ff",
+      "accent": "#20d3ce",
+      "background": "#000000",
+      "text_primary": "#ffffff",
+      "text_secondary": "rgba(255,255,255,0.70)",
+      "borders": "rgba(255,255,255,0.10)"
+    },
+    "typography": {
+      "headings": "Bold, uppercase-friendly sans-serif",
+      "body": "Clean sans-serif, comfortable line-height",
+      "labels_case": "UPPERCASE or small caps for section labels"
+    },
+    "cta_language": {
+      "blrb_button": "See the BLRB",
+      "subscribe_button": "Subscribe"
+    },
+    "icons": {
+      "blrb_button_icon": "NONE_FOR_NOW (future: lightning/target/radar)",
+      "lane_icons_fallback": "TEXT_LABELS_FOR_V1 (no icons in MVP; may add later)"
+    },
+    "assets": {
+      "logo_white": "/logos/brand/BLRB_LOGO_WHITE.SVG",
+      "logo_gradient": "/logos/brand/BLRB_LOGO_GRADIENT.SVG",
+      "publisher_logos": "SKIP_FOR_MVP (future option)"
+    }
+  },
+  "information_architecture": {
+    "lanes": ["Tech", "AI", "Products", "Dev", "Crypto"],
+    "homepage_flow": [
+      "Header (logo + date + Subscribe)",
+      "Tagline (\"Today’s Brief — Opportunities in Motion\")",
+      "Today’s Hits (horizontal snap, ~3 items, 16:9)",
+      "Lane Jump (horizontal pills, anchors)",
+      "Lane Sections (single column, 3–10 cards each, 4:3)",
+      "Subscribe CTA section",
+      "Footer (minimal links)"
+    ],
+    "no_archive": true,
+    "explainer_reveal_style": "Click-to-reveal only (no auto-expanded explainers)."
+  },
+  "routing": {
+    "framework": "Next.js (App Router)",
+    "routes": [
+      { "path": "/", "purpose": "Daily homepage" },
+      { "path": "/about", "purpose": "Static page" },
+      { "path": "/contact", "purpose": "Static page" },
+      { "path": "/privacy", "purpose": "Static page" },
+      { "path": "/terms", "purpose": "Static page" },
+      { "path": "/404", "purpose": "Not found (branded)" }
+    ],
+    "deep_links": {
+      "blrb_panel_query": "?blrb=<storyId>",
+      "behavior": "If present on load, open BLRB panel for that story; browser Back closes it."
+    }
+  },
+  "layout": {
+    "container": {
+      "max_width_desktop_px": 760,
+      "centered": true,
+      "single_column_all_breakpoints": true
+    },
+    "sections": {
+      "hits_aspect_ratio": "16:9",
+      "lane_card_aspect_ratio": "4:3"
+    },
+    "spacing": {
+      "section_gap_rem": 2.0,
+      "card_gap_rem": 0.75
+    }
+  },
+  "components": {
+    "Layout": {
+      "children": ["Header", "Main", "Footer"],
+      "sticky_header": true,
+      "backdrop_blur": true
+    },
+    "Header": {
+      "props": ["date_string", "onSubscribeClick"],
+      "contents": ["Logo/wordmark", "Date", "Subscribe button"],
+      "timezone": "America/Chicago"
+    },
+    "Tagline": { "copy": "Today’s Brief — Opportunities in Motion" },
+    "HitsCarousel": {
+      "props": ["stories[]"],
+      "behavior": "Horizontal snap scroll; keyboard arrows on desktop; drag/trackpad/mouse support; no visible swipe hint.",
+      "a11y": ["roledescription=carousel", "arrow-key nav", "prefers-reduced-motion respected"],
+      "card": ["lane • source label", "headline (2 lines clamp)", "one-liner", "See the BLRB button", "image 16:9"]
+    },
+    "LaneNav": {
+      "props": ["lanes[]"],
+      "behavior": "Horizontal scroll of pills; clicking scrolls to section anchor with sticky-header offset; optional sticky-on-scroll.",
+      "labels": "TEXT ONLY (no icons in MVP)"
+    },
+    "LaneSection": {
+      "props": ["lane", "stories[]"],
+      "structure": ["Lane header label", "Grid (single column) of StoryCard; AdCard injected via feature flag."],
+      "ad_insertion": "After item #2 by default"
+    },
+    "StoryCard": {
+      "props": ["id", "lane", "source", "title", "blurb", "url", "imageUrl", "hasExplainer"],
+      "buttons": ["See the BLRB", "Source"],
+      "image": "4:3, object-cover, reserved space to avoid layout shift"
+    },
+    "AdCard": {
+      "label": "ADVERTISEMENT",
+      "footprint": "Same as StoryCard",
+      "placement": "One per lane (mid-list)",
+      "feature_flag": "adsEnabled",
+      "dev_override_query": "?ads=on|off",
+      "disable_behavior": "When false, remove from DOM and collapse list with no gap",
+      "creative": "Fake but real-looking: image + short CTA + subtle border"
+    },
+    "BlrbSheet": {
+      "type": "Bottom sheet",
+      "default_height_ratio": 0.75,
+      "gestures": ["Swipe down to close"],
+      "controls": ["X close", "Tap backdrop", "Esc to close (desktop)"],
+      "sections": [
+        "Topic",
+        "What Happened",
+        "Why It Matters",
+        "The Takeaway",
+        "Opportunity Lens",
+        "Possible Play",
+        "Sources"
+      ],
+      "footer_actions": ["Copy", "Share", "Source"],
+      "skeleton_state": true,
+      "accessibility": ["role=dialog", "focus trap", "return focus to trigger"]
+    },
+    "SubscribePopup": {
+      "trigger": "Every tab session after 5s delay (sessionStorage)",
+      "edge_cases": "If BLRB sheet is open at 5s, delay popup until sheet closes.",
+      "dev_override_query": "?subscribe=force",
+      "headline": "THE NEWSLETTER FOR BUILDERS.",
+      "benefits": [
+        { "title": "CUT THROUGH THE NOISE", "desc": "Only the biggest tech shifts, no filler or fluff." },
+        { "title": "ACTIONABLE IDEAS", "desc": "Turn today’s trends into tomorrow’s wins." },
+        { "title": "FAST FORMAT", "desc": "Get it in minutes, use it all day." },
+        { "title": "NO SPAM, EVER", "desc": "We’ll never share, sell, or trade your information — period." }
+      ],
+      "cta_text": "SUBSCRIBE",
+      "privacy_note": "We will never share, sell, or trade your information — period."
+    },
+    "Footer": {
+      "links": ["About", "Privacy", "Terms", "Contact"],
+      "copyright": "© {currentYear} BLRB"
+    },
+    "Skeletons": {
+      "CardSkeleton": "Image block + 2–3 text lines + button bar placeholder",
+      "SheetSkeleton": "Label chips + 4 text lines; ~200–300ms minimum display"
+    },
+    "SmartImage": {
+      "inputs": ["image_url_raw", "lane", "source_name"],
+      "fallbacks": [
+        "generic BLRB fallback image (dark gradient + BLRB logo)",
+        "TEXT LABELS for lane/source (no icons in MVP)"
+      ],
+      "proxy": "Next/Image optimization",
+      "lazy_load": true
+    }
+  },
+  "interactions": {
+    "blrb_open": "Opens bottom sheet; body scroll locked; focus moved inside sheet.",
+    "blrb_close": "Swipe down, tap backdrop, X, or Esc; focus returns to originating button.",
+    "share_copy": "Copy formatted BLRB text; invoke native share sheet on mobile if available.",
+    "lane_nav_click": "Scroll to section anchor with sticky-header offset; highlight active lane pill on approach.",
+    "hits_swipe": "Momentum scrolling with snap points; NO visible swipe hint."
+  },
+  "data_contracts": {
+    "Story": {
+      "id": "string",
+      "lane": "enum: Tech|AI|Products|Dev|Crypto",
+      "source": "string",
+      "title": "string",
+      "blurb": "string (≤ ~260 chars)",
+      "url": "string (absolute)",
+      "imageUrl": "string | null",
+      "hasExplainer": "boolean"
+    },
+    "Explainer": {
+      "storyId": "string",
+      "topic": "string",
+      "whatHappened": "string (≤ 4 sentences)",
+      "whyItMatters": "string (≤ 4 sentences)",
+      "takeaway": "string (≤ 4 sentences)",
+      "opportunityLens": "string (≤ 4 sentences)",
+      "possiblePlay": [
+        { "title": "string", "detail": "string (1–2 sentences, ethical/net-positive)" }
+      ],
+      "sources": [{ "title": "string", "url": "string" }],
+      "generatedAt": "ISO timestamp",
+      "version": "int"
+    }
+  },
+  "data_loading": {
+    "initial_load": "Server render homepage with today's stories (stubbed for now with mock JSON).",
+    "hydration": "Client hydrates interactions (carousel, sheet, share/copy).",
+    "api_stubs": [
+      { "method": "GET", "path": "/api/stories/today", "returns": "Grouped stories by lane (mock JSON)" },
+      { "method": "GET", "path": "/api/stories/:id/explainer", "returns": "Explainer object (mock JSON)" },
+      { "method": "POST", "path": "/api/subscribe", "returns": "{ ok: true } (stub for now)" }
+    ],
+    "skeletons": "Show CardSkeletons while fetching; show SheetSkeleton for 200–300ms on BLRB open.",
+    "placeholders": {
+      "hits": ["/images/hits/16x9/placeholder-1.jpg", "/images/hits/16x9/placeholder-2.jpg", "/images/hits/16x9/placeholder-3.jpg"],
+      "lanes": ["/images/lanes/4x3/placeholder-1.jpg", "/images/lanes/4x3/placeholder-2.jpg", "/images/lanes/4x3/placeholder-3.jpg"],
+      "fallback_generic": "/images/fallback.jpg"
+    }
+  },
+  "images": {
+    "ratios": { "hits": "16:9", "lane": "4:3" },
+    "fit": "object-cover",
+    "fallbacks": {
+      "order": ["story image if present", "generic BLRB fallback image", "text labels only"],
+      "publisher_logos": "DEFERRED"
+    },
+    "proxy": "Next/Image optimization with fixed sizes per slot",
+    "preload": "Preload first 'Today’s Hits' image only",
+    "lazy_load_below_fold": true,
+    "alt_text": "Auto: `${source}: ${title}`"
+  },
+  "ads": {
+    "enabled_flag": "adsEnabled",
+    "default": true,
+    "placements": {
+      "per_lane": "Insert AdCard after item #2 in each lane list",
+      "hits_optional": "Optional slot inside the Today’s Hits carousel (off by default)"
+    },
+    "labeling": "Use 'ADVERTISEMENT' where the lane label normally appears",
+    "styling": "Same footprint as StoryCard; subtle border to differentiate",
+    "dev_override_query": "?ads=on|off",
+    "disable_behavior": "When flag is false, do not render AdCard; collapse without gap"
+  },
+  "animations": {
+    "defaults": {
+      "duration_ms": 220,
+      "easing_in": "ease-in",
+      "easing_out": "ease-out"
+    },
+    "tech": "TAILWIND_ONLY_FOR_MVP (no Framer Motion)",
+    "sheet": "Slide-up + slight fade; swipe-down to dismiss",
+    "buttons": "Tap scale 0.98 on press",
+    "hints": "NO swipe hint on carousel"
+  },
+  "accessibility": {
+    "color_contrast": "WCAG AA minimum",
+    "focus_management": "Trap focus inside sheet; restore to trigger on close",
+    "keyboard": "Esc closes sheet; Tab order respects visual order; carousel arrow keys on desktop",
+    "hit_targets": "Min 44x44px tap targets"
+  },
+  "performance": {
+    "cls": "Avoid by reserving image space and clamping text lines",
+    "lcp_target": "<= 2.5s on mobile",
+    "lazy_loading": "Images below fold",
+    "caching_note": "Frontend will later use ISR; for now mock data is static"
+  },
+  "feature_flags": {
+    "showSubscribePopup": true,
+    "adsEnabled": true,
+    "panelVersion": "v1",
+    "devHelpers": {
+      "useMocks": true,
+      "logInteractions": false,
+      "query_overrides": ["?ads=on|off", "?subscribe=force", "?sheet=on&id=<storyId>"]
+    }
+  },
+  "copy_snippets": {
+    "tagline": "Today’s Brief — Opportunities in Motion",
+    "subscribe_popup": {
+      "headline": "THE NEWSLETTER FOR BUILDERS.",
+      "benefits": [
+        "CUT THROUGH THE NOISE — Only the biggest tech shifts, no filler or fluff.",
+        "ACTIONABLE IDEAS — Turn today’s trends into tomorrow’s wins.",
+        "FAST FORMAT — Get it in minutes, use it all day.",
+        "NO SPAM, EVER — We’ll never share, sell, or trade your information — period."
+      ],
+      "cta": "SUBSCRIBE"
+    },
+    "blrb_button": "See the BLRB",
+    "lane_empty_state": "No big moves here today."
+  },
+  "mvp_essentials": {
+    "favicons_manifest": ["/favicon.ico", "(optional) /site.webmanifest later"],
+    "basic_seo": ["robots.txt allow-all", "default <meta> title/description/viewport"],
+    "default_og": "/og/default.png",
+    "404_page": true,
+    "external_link_safety": "rel=\"noopener noreferrer\" on outbound links",
+    "lint_format": "ESLint + Prettier",
+    "sticky_offset": "Anchor scroll accounts for sticky header height",
+    "image_reserved_space": true
+  },
+  "testing_QA": {
+    "browsers": ["iOS Safari", "Android Chrome", "Desktop Chrome"],
+    "checks": [
+      "Keyboard open/close of BLRB sheet",
+      "Back button closes deep-linked sheet",
+      "No CLS during image load",
+      "Carousel arrow keys work; drag works; no swipe hint",
+      "Subscribe popup shows once per tab session after 5s",
+      "Ads render when enabled and disappear with no gap when disabled",
+      "Lane pills scroll with sticky offset"
+    ],
+    "lighthouse_targets": { "mobile_performance": ">= 80", "accessibility": ">= 90" }
+  },
+  "sprint_order": [
+    "Scaffold Next.js + Tailwind + pages",
+    "Build Header/Footer/Tagline (static)",
+    "Implement HitsCarousel (mock data + skeletons)",
+    "Implement LaneNav + one LaneSection + StoryCard",
+    "Implement BlrbSheet (skeleton + sections; mock explainer)",
+    "Wire deep-link ?blrb=<id> and Back behavior",
+    "Add SubscribePopup (session-based 5s delay; sheet-aware)",
+    "Add SmartImage + generic fallback + lazy-load",
+    "Replicate LaneSection for all lanes; insert AdCard slots",
+    "QA pass (mobile first), deploy preview"
+  ],
+  "dev_environment": {
+    "timezone": "America/Chicago",
+    "folder_roots": {
+      "repo_root": "3_WEBSITE/blrb-web",
+      "assets_staging": "3_WEBSITE/_ASSETS_STAGING",
+      "public_images": "3_WEBSITE/blrb-web/public/images"
+    },
+    "placeholders_to_create": [
+      "/public/images/hits/16x9/placeholder-1.jpg",
+      "/public/images/lanes/4x3/placeholder-1.jpg",
+      "/public/images/fallback.jpg"
+    ]
+  },
+  "llm_instructions": {
+    "goal": "Use this JSON to understand BLRB’s frontend plan and generate components/pages exactly to spec.",
+    "style": "Clean, minimal, mobile-first; Tailwind utilities; no external UI kits.",
+    "constraints": [
+      "Single-column layout across breakpoints (centered, ~760px max).",
+      "No icons on BLRB buttons for v1.",
+      "Ad slot per lane (feature-flagged, removable).",
+      "Bottom sheet with focus trap, ESC close, swipe down.",
+      "Tailwind-only animations for MVP.",
+      "Carousel has snap scrolling + arrow keys; no swipe hint."
+    ],
+    "ask_to_confirm": "Please confirm you understand this consolidated spec. If anything conflicts with earlier decisions, list the conflict explicitly before coding."
+  }
+}

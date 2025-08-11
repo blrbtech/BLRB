@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLRB - The Newsletter for Builders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#00b4ff',
+                        'accent': '#20d3ce',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-sm bg-black/80 border-b border-white/10">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <div class="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    BLRB
+                </div>
+                <div class="text-gray-400 text-sm">
+                    Sunday, August 11, 2025
+                </div>
+                <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-6 rounded-lg transition-colors">
+                    SUBSCRIBE
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 space-y-8 py-8">
+        <!-- Tagline -->
+        <div class="text-center">
+            <h1 class="text-xl text-gray-400 tracking-wide">
+                Today's Brief — Opportunities in Motion
+            </h1>
+        </div>
+        
+        <!-- Today's Hits -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold tracking-tight">TODAY'S HITS</h2>
+                <div class="flex gap-2">
+                    <button id="hitsScrollLeft" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <button id="hitsScrollRight" class="p-2 rounded-full bg-gray-800 hover:bg-gray-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="hitsContainer" class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide" style="scroll-behavior: smooth;">
+                <!-- Hit 1 -->
+                <div class="flex-none w-80 snap-center">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-video relative group cursor-pointer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                            <div class="flex items-center gap-2 text-xs font-medium">
+                                <span class="text-accent uppercase">AI</span>
+                                <span class="text-gray-400">•</span>
+                                <span class="text-gray-400 uppercase">TechCrunch</span>
+                            </div>
+                            <h3 class="text-lg font-bold leading-tight">
+                                OpenAI announces GPT-5 with unprecedented reasoning capabilities
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                The latest model can solve complex multi-step problems and shows emergent mathematical abilities that surprised even its creators.
+                            </p>
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 2 -->
+                <div class="flex-none w-80 snap-center">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-video relative group cursor-pointer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                            <div class="flex items-center gap-2 text-xs font-medium">
+                                <span class="text-accent uppercase">PRODUCTS</span>
+                                <span class="text-gray-400">•</span>
+                                <span class="text-gray-400 uppercase">The Verge</span>
+                            </div>
+                            <h3 class="text-lg font-bold leading-tight">
+                                Apple Vision Pro 2 leaked specs show 4K per eye displays
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Internal documents reveal Apple is targeting a $1,999 price point for the next generation headset, launching Q2 2025.
+                            </p>
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 3 -->
+                <div class="flex-none w-80 snap-center">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-video relative group cursor-pointer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                            <div class="flex items-center gap-2 text-xs font-medium">
+                                <span class="text-accent uppercase">TECH</span>
+                                <span class="text-gray-400">•</span>
+                                <span class="text-gray-400 uppercase">Bloomberg</span>
+                            </div>
+                            <h3 class="text-lg font-bold leading-tight">
+                                Microsoft acquires AI startup for $2.1B in largest deal since GitHub
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                The acquisition brings advanced language model capabilities directly into Microsoft 365 and Azure cloud services.
+                            </p>
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 4 -->
+                <div class="flex-none w-80 snap-center">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-video relative group cursor-pointer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                            <div class="flex items-center gap-2 text-xs font-medium">
+                                <span class="text-accent uppercase">DEV</span>
+                                <span class="text-gray-400">•</span>
+                                <span class="text-gray-400 uppercase">GitHub</span>
+                            </div>
+                            <h3 class="text-lg font-bold leading-tight">
+                                GitHub Copilot Workspace launches with full IDE integration
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                The AI-powered coding environment can now generate entire project structures and handle complex refactoring tasks autonomously.
+                            </p>
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 5 -->
+                <div class="flex-none w-80 snap-center">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-video relative group cursor-pointer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                            <div class="flex items-center gap-2 text-xs font-medium">
+                                <span class="text-accent uppercase">CRYPTO</span>
+                                <span class="text-gray-400">•</span>
+                                <span class="text-gray-400 uppercase">CoinDesk</span>
+                            </div>
+                            <h3 class="text-lg font-bold leading-tight">
+                                Ethereum 2.0 staking rewards hit new high as adoption surges
+                            </h3>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                Over 32 million ETH now staked as institutional investors embrace proof-of-stake rewards averaging 4.2% APY.
+                            </p>
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Lane Navigation -->
+        <div class="flex gap-3 overflow-x-auto pb-2">
+            <button class="flex-shrink-0 px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded-full text-sm font-medium transition-colors">
+                TECH
+            </button>
+            <button class="flex-shrink-0 px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded-full text-sm font-medium transition-colors">
+                AI
+            </button>
+            <button class="flex-shrink-0 px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded-full text-sm font-medium transition-colors">
+                PRODUCTS
+            </button>
+            <button class="flex-shrink-0 px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded-full text-sm font-medium transition-colors">
+                DEV
+            </button>
+            <button class="flex-shrink-0 px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded-full text-sm font-medium transition-colors">
+                CRYPTO
+            </button>
+        </div>
+        
+        <!-- TECH Section -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold tracking-tight uppercase">TECH</h2>
+            
+            <div class="grid gap-6">
+                <!-- Story 1 -->
+                <article class="group">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-[4/3] mb-4">
+                        <div class="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div class="text-center space-y-2">
+                                <div class="text-xs font-medium text-accent uppercase tracking-wider">
+                                    TECH
+                                </div>
+                                <div class="text-xs text-gray-400 uppercase tracking-wider">
+                                    REUTERS
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs font-medium tracking-wider">
+                            <span class="text-accent uppercase">TECH</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-400 uppercase">REUTERS</span>
+                        </div>
+                        
+                        <h3 class="text-lg font-bold leading-tight group-hover:text-accent transition-colors">
+                            Google Cloud revenue jumps 35% as AI services drive growth
+                        </h3>
+                        
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            Enterprise customers are rapidly adopting Vertex AI, with usage up 300% quarter-over-quarter.
+                        </p>
+                        
+                        <div class="flex items-center gap-3 pt-2">
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                            <span class="text-xs text-gray-400 hover:text-white transition-colors uppercase tracking-wider cursor-pointer">
+                                SOURCE
+                            </span>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Story 2 -->
+                <article class="group">
+                    <div class="bg-gray-900 rounded-xl overflow-hidden aspect-[4/3] mb-4">
+                        <div class="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                            <div class="text-center space-y-2">
+                                <div class="text-xs font-medium text-accent uppercase tracking-wider">
+                                    TECH
+                                </div>
+                                <div class="text-xs text-gray-400 uppercase tracking-wider">
+                                    WIRED
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs font-medium tracking-wider">
+                            <span class="text-accent uppercase">TECH</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-400 uppercase">WIRED</span>
+                        </div>
+                        
+                        <h3 class="text-lg font-bold leading-tight group-hover:text-accent transition-colors">
+                            Quantum computing breakthrough achieves 99.9% error correction
+                        </h3>
+                        
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            IBM researchers demonstrate stable qubits that maintain coherence for over 100 microseconds.
+                        </p>
+                        
+                        <div class="flex items-center gap-3 pt-2">
+                            <button class="bg-primary hover:bg-accent text-black font-bold py-2 px-4 rounded-lg text-xs transition-colors">
+                                SEE THE BLRB
+                            </button>
+                            <span class="text-xs text-gray-400 hover:text-white transition-colors uppercase tracking-wider cursor-pointer">
+                                SOURCE
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <!-- Subscribe CTA -->
+        <div class="text-center py-16">
+            <div class="bg-gradient-to-r from-primary/10 to-accent/10 rounded-2xl p-8 space-y-6">
+                <h2 class="text-2xl font-bold tracking-tight">
+                    THE NEWSLETTER FOR BUILDERS
+                </h2>
+                <p class="text-gray-400 max-w-md mx-auto">
+                    Get sharp insights on tech's biggest moves. No filler, just opportunities you can act on.
+                </p>
+                <button class="bg-primary hover:bg-accent text-black font-bold py-4 px-8 rounded-lg text-lg transition-colors">
+                    SUBSCRIBE
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Today's Hits horizontal scrolling
+        const hitsContainer = document.getElementById('hitsContainer');
+        const hitsScrollLeft = document.getElementById('hitsScrollLeft');
+        const hitsScrollRight = document.getElementById('hitsScrollRight');
+        
+        if (hitsScrollLeft && hitsScrollRight && hitsContainer) {
+            hitsScrollLeft.addEventListener('click', () => {
+                hitsContainer.scrollBy({
+                    left: -320, // Width of one card plus gap
+                    behavior: 'smooth'
+                });
+            });
+            
+            hitsScrollRight.addEventListener('click', () => {
+                hitsContainer.scrollBy({
+                    left: 320, // Width of one card plus gap
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Update scroll button visibility
+            function updateScrollButtons() {
+                const { scrollLeft, scrollWidth, clientWidth } = hitsContainer;
+                hitsScrollLeft.style.opacity = scrollLeft > 0 ? '1' : '0.5';
+                hitsScrollRight.style.opacity = scrollLeft < scrollWidth - clientWidth ? '1' : '0.5';
+            }
+            
+            hitsContainer.addEventListener('scroll', updateScrollButtons);
+            updateScrollButtons(); // Initial state
+        }
+        
+        // Add some interactivity
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.textContent.includes('SEE THE BLRB')) {
+                    e.preventDefault();
+                    alert('BLRB panel would open here! 🚀');
+                } else if (this.textContent === 'SUBSCRIBE') {
+                    e.preventDefault();
+                    alert('Subscribe popup would open here! 📧');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
