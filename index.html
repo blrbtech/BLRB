@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLRB - The Newsletter for Builders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#00b4ff',
+                        'accent': '#20d3ce',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bottom-sheet {
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+        }
+        .bottom-sheet.open {
+            transform: translateY(0);
+        }
+        .subscribe-popup {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+        }
+        .subscribe-popup.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .carousel-snap {
+            scroll-snap-type: x mandatory;
+        }
+        .carousel-snap > * {
+            scroll-snap-align: center;
+        }
+        .lane-btn.selected {
+            color: #00b4ff !important;
+        }
+        
+        /* Story feed container animations */
+        #storyFeedContainer {
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+            touch-action: pan-y; /* Allow vertical scrolling but handle horizontal swipes */
+        }
+        
+        /* Touch feedback for swipe area */
+        .swipe-area {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        /* Hide scrollbars */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Smooth arrow transitions */
+        #hitsScrollLeft, #hitsScrollRight {
+            transition: opacity 0.3s ease, transform 0.2s ease;
+        }
+        
+        /* Hover effects for arrows */
+        #hitsScrollLeft:hover {
+            transform: translateY(-50%) scale(1.1) !important;
+        }
+        
+        #hitsScrollRight:hover {
+            transform: translateY(-50%) scale(1.1) !important;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 backdrop-blur-sm bg-gradient-to-r from-primary to-accent border-b border-white/10">
+        <div class="max-w-2xl mx-auto px-4 relative">
+            <div class="flex items-center justify-between py-2">
+                <div class="text-3xl font-bold text-white">
+                    BLRB
+                </div>
+                <!-- Hamburger Menu Button -->
+                <div class="relative">
+                    <button id="menuToggle" class="p-2 rounded-lg hover:bg-white/10 transition-colors">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" class="absolute top-full right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-xl opacity-0 scale-95 transform origin-top-right transition-all duration-200 pointer-events-none z-50">
+                        <nav class="py-2">
+                            <button onclick="openSubscribe(); closeDropdown();" class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
+                                Newsletter
+                            </button>
+                            <a href="#about" class="block px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
+                                About Us
+                            </a>
+                            <a href="#contact" class="block px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
+                                Contact
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="max-w-2xl mx-auto px-4 pb-20">
+        <!-- Today's Hits - Full Width -->
+        <section class="py-6 -mx-4">
+            <div class="px-4 mb-4">
+                <h2 class="text-2xl font-black bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent uppercase tracking-wide">TODAY'S HITS</h2>
+            </div>
+            
+            <div class="relative overflow-hidden">
+                <!-- Global navigation arrows positioned at center of aspect video area -->
+                <button id="hitsScrollLeft" class="absolute left-6 z-30 opacity-0 transition-opacity duration-300" style="top: calc((100vw - 2rem) * 9 / 32); transform: translateY(-50%);">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button id="hitsScrollRight" class="absolute right-6 z-30 opacity-100 transition-opacity duration-300" style="top: calc((100vw - 2rem) * 9 / 32); transform: translateY(-50%);">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                
+                <div id="hitsContainer" class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide" style="scroll-behavior: smooth;">
+                <!-- Hit 1: GPT-5 -->
+                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('gpt5')">
+                    <div class="bg-gray-900 rounded-lg overflow-hidden mb-4 relative">
+                        <div class="aspect-video bg-gradient-to-br from-blue-600/20 to-cyan-600/20 flex items-center justify-center relative">
+                            <!-- Gradients that match this exact aspect-video height -->
+                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="text-center">
+                                <div class="text-4xl font-bold mb-2">GPT-5</div>
+                                <div class="text-sm text-gray-400">AI BREAKTHROUGH</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span class="text-accent uppercase">AI</span>
+                            <span>•</span>
+                            <span>TECHCRUNCH</span>
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight">OpenAI announces GPT-5 with unprecedented reasoning capabilities</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">The latest model can solve complex multi-step problems and shows emergent mathematical abilities that surprised even its creators.</p>
+                        <div class="pt-0">
+                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6 rounded text-base uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 2: Vision Pro -->
+                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('vision-pro')">
+                    <div class="bg-gray-900 rounded-lg overflow-hidden mb-4 relative">
+                        <div class="aspect-video bg-gradient-to-br from-purple-600/20 to-pink-600/20 flex items-center justify-center relative">
+                            <!-- Gradients that match this exact aspect-video height -->
+                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold mb-2">VISION PRO 2</div>
+                                <div class="text-sm text-gray-400">4K PER EYE</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span class="text-accent uppercase">PRODUCTS</span>
+                            <span>•</span>
+                            <span>THE VERGE</span>
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight">Apple Vision Pro 2 leaked specs show 4K per eye displays</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Internal documents reveal Apple is targeting a $1,999 price point for the next generation headset, launching Q2 2025.</p>
+                        <div class="pt-0">
+                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6 rounded text-base uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 3: Microsoft AI -->
+                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('microsoft')">
+                    <div class="bg-gray-900 rounded-lg overflow-hidden mb-4 relative">
+                        <div class="aspect-video bg-gradient-to-br from-green-600/20 to-blue-600/20 flex items-center justify-center relative">
+                            <!-- Gradients that match this exact aspect-video height -->
+                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold mb-2">$2.1B DEAL</div>
+                                <div class="text-sm text-gray-400">MICROSOFT AI</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span class="text-accent uppercase">TECH</span>
+                            <span>•</span>
+                            <span>BLOOMBERG</span>
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight">Microsoft acquires AI startup for $2.1B in largest deal since GitHub</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">The acquisition brings advanced language model capabilities directly into Microsoft 365 and Azure cloud services.</p>
+                        <div class="pt-0">
+                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6 rounded text-base uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 4: GitHub Copilot -->
+                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('copilot')">
+                    <div class="bg-gray-900 rounded-lg overflow-hidden mb-4 relative">
+                        <div class="aspect-video bg-gradient-to-br from-orange-600/20 to-red-600/20 flex items-center justify-center relative">
+                            <!-- Gradients that match this exact aspect-video height -->
+                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold mb-2">COPILOT</div>
+                                <div class="text-sm text-gray-400">WORKSPACE</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span class="text-accent uppercase">DEV</span>
+                            <span>•</span>
+                            <span>GITHUB BLOG</span>
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight">GitHub Copilot Workspace launches with full IDE integration</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">The AI-powered coding environment can now generate entire project structures and handle complex refactoring tasks autonomously.</p>
+                        <div class="pt-0">
+                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6 rounded text-base uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hit 5: Ethereum Staking -->
+                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('ethereum-staking')">
+                    <div class="bg-gray-900 rounded-lg overflow-hidden mb-4 relative">
+                        <div class="aspect-video bg-gradient-to-br from-indigo-600/20 to-purple-600/20 flex items-center justify-center relative">
+                            <!-- Gradients that match this exact aspect-video height -->
+                            <div class="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none"></div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold mb-2">32M ETH</div>
+                                <div class="text-sm text-gray-400">STAKING SURGE</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span class="text-accent uppercase">CRYPTO</span>
+                            <span>•</span>
+                            <span>COINDESK</span>
+                        </div>
+                        <h3 class="font-bold text-lg leading-tight">Ethereum 2.0 staking rewards hit new high as adoption surges</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Over 32 million ETH now staked as institutional investors embrace proof-of-stake rewards averaging 4.2% APY.</p>
+                        <div class="pt-0">
+                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6 rounded text-base uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gradient Divider -->
+        <div class="h-0.5 bg-gradient-to-r from-primary to-accent rounded-full mb-6"></div>
+
+        <!-- Lane Navigation -->
+        <div class="flex gap-12 overflow-x-auto pb-4 mb-6 justify-center" id="laneNav">
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">AI</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors selected">TECH</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">PRODUCTS</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">DEV</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">CRYPTO</button>
+        </div>
+
+        <!-- Story Feed Container -->
+        <div id="swipeArea" class="relative overflow-hidden swipe-area">
+            <div id="storyFeedContainer" class="flex transition-transform duration-500 ease-out">
+                <!-- All lane content will be preloaded here -->
+                <div id="lane-AI" class="w-full flex-shrink-0 space-y-4"></div>
+                <div id="lane-TECH" class="w-full flex-shrink-0 space-y-4"></div>
+                <div id="lane-PRODUCTS" class="w-full flex-shrink-0 space-y-4"></div>
+                <div id="lane-DEV" class="w-full flex-shrink-0 space-y-4"></div>
+                <div id="lane-CRYPTO" class="w-full flex-shrink-0 space-y-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Subscribe Popup -->
+    <div id="subscribePopup" class="subscribe-popup fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-gray-900 border border-gray-700 p-6 max-w-sm w-full">
+            <button onclick="closeSubscribe()" class="float-right text-gray-400 hover:text-white">✕</button>
+            <div class="mb-6">
+                <div class="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+                    BLRB
+                </div>
+                <h3 class="font-bold mb-2">THE NEWSLETTER FOR BUILDERS</h3>
+                <p class="text-sm text-gray-400">BLRB gives you today's top tech stories and shows you how to turn them into opportunities.</p>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <div class="space-y-0.5">
+                    <div class="text-base font-bold text-primary uppercase tracking-wide">CUT THROUGH THE NOISE</div>
+                    <p class="text-xs text-gray-400">Only the biggest tech shifts, no filler or fluff.</p>
+                </div>
+                
+                <div class="space-y-0.5">
+                    <div class="text-base font-bold text-primary uppercase tracking-wide">ACTIONABLE IDEAS</div>
+                    <p class="text-xs text-gray-400">Turn today's trends into tomorrow's wins.</p>
+                </div>
+                
+                <div class="space-y-0.5">
+                    <div class="text-base font-bold text-primary uppercase tracking-wide">FAST FORMAT</div>
+                    <p class="text-xs text-gray-400">Get it in minutes, use it all day.</p>
+                </div>
+                
+                <div class="space-y-0.5">
+                    <div class="text-base font-bold text-primary uppercase tracking-wide">NO SPAM, EVER</div>
+                    <p class="text-xs text-gray-400">We'll never share, sell, or trade your information — period.</p>
+                </div>
+            </div>
+            
+            <!-- Form Fields -->
+            <div class="space-y-4">
+                <input 
+                    type="text" 
+                    id="firstName" 
+                    name="firstName" 
+                    class="w-full bg-gray-800 border border-gray-600 px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                    placeholder="First Name"
+                />
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="w-full bg-gray-800 border border-gray-600 px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                    placeholder="Email Address"
+                />
+                <button class="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-3 px-6 uppercase tracking-wide transition-all">
+                    SUBSCRIBE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLRB Bottom Sheet -->
+    <div id="blrbSheet" class="bottom-sheet fixed inset-x-0 bottom-0 z-50 bg-gray-900 border-t border-gray-700 rounded-t-lg max-h-[80vh] overflow-y-auto">
+        <div class="sticky top-0 bg-gray-900 border-b border-gray-700 p-4 flex items-center justify-between">
+            <h2 class="font-bold text-primary uppercase tracking-wide">BLRB</h2>
+            <button onclick="closeBlrb()" class="text-gray-400 hover:text-white">✕</button>
+        </div>
+        
+        <div class="p-4 space-y-6">
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">TOPIC</div>
+                <p class="text-sm">OpenAI's GPT-5 breakthrough with advanced reasoning capabilities represents a massive leap forward in AI development.</p>
+            </div>
+            
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">WHAT HAPPENED</div>
+                <p class="text-sm text-gray-300">OpenAI just announced GPT-5, their most powerful language model yet. Early tests show it can solve complex multi-step mathematical problems, write sophisticated code with minimal guidance, and demonstrate reasoning capabilities that seemed impossible just months ago.</p>
+            </div>
+            
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">WHY IT MATTERS</div>
+                <p class="text-sm text-gray-300">This isn't just another incremental update. GPT-5's reasoning abilities could fundamentally change how we approach problem-solving across industries. We're talking about AI that can actually "think through" complex scenarios rather than just pattern match.</p>
+            </div>
+            
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">THE TAKEAWAY</div>
+                <p class="text-sm text-gray-300">The gap between human and AI reasoning just got dramatically smaller. Companies that integrate these capabilities first will have an enormous competitive advantage. The question isn't if this will disrupt your industry — it's when.</p>
+            </div>
+            
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">OPPORTUNITY LENS</div>
+                <p class="text-sm text-gray-300">Look for areas where complex reasoning is currently a bottleneck in your business. Financial analysis, strategic planning, code architecture — these could all be transformed by GPT-5's capabilities.</p>
+            </div>
+            
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">POSSIBLE PLAY</div>
+                <div class="space-y-3">
+                    <div>
+                        <div class="text-xs font-medium text-white uppercase tracking-wide">START EXPERIMENTING NOW</div>
+                        <p class="text-xs text-gray-400">Get your team familiar with advanced AI reasoning before your competitors do.</p>
+                    </div>
+                    <div>
+                        <div class="text-xs font-medium text-white uppercase tracking-wide">IDENTIFY HIGH-VALUE USE CASES</div>
+                        <p class="text-xs text-gray-400">Map out where reasoning bottlenecks exist in your current processes.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="text-xs font-bold text-accent uppercase tracking-wide mb-2">SOURCES</div>
+                <div class="space-y-2">
+                    <a href="#" class="block text-xs text-primary hover:text-accent transition-colors">→ OpenAI Official Announcement</a>
+                    <a href="#" class="block text-xs text-primary hover:text-accent transition-colors">→ TechCrunch Analysis</a>
+                    <a href="#" class="block text-xs text-primary hover:text-accent transition-colors">→ AI Research Paper</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sticky bottom-0 bg-gray-900 border-t border-gray-700 p-4">
+            <div class="flex gap-3">
+                <button class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded text-xs uppercase tracking-wide transition-colors">
+                    COPY
+                </button>
+                <button class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded text-xs uppercase tracking-wide transition-colors">
+                    SHARE
+                </button>
+                <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2 px-4 rounded text-xs uppercase tracking-wide transition-all">
+                    SOURCE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backdrop -->
+    <div id="backdrop" class="fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity"></div>
+
+    <script>
+        function openSubscribe() {
+            document.getElementById('subscribePopup').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeSubscribe() {
+            document.getElementById('subscribePopup').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function openBlrb(storyId) {
+            document.getElementById('blrbSheet').classList.add('open');
+            document.getElementById('backdrop').style.opacity = '1';
+            document.getElementById('backdrop').style.pointerEvents = 'all';
+            document.body.style.overflow = 'hidden';
+            
+            // Update content based on story
+            console.log('Opening BLRB for:', storyId);
+        }
+        
+        function closeBlrb() {
+            document.getElementById('blrbSheet').classList.remove('open');
+            document.getElementById('backdrop').style.opacity = '0';
+            document.getElementById('backdrop').style.pointerEvents = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close on backdrop click
+        document.getElementById('backdrop').addEventListener('click', closeBlrb);
+        
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSubscribe();
+                closeBlrb();
+            }
+        });
+        
+        // Auto-show subscribe popup after 5 seconds (for demo)
+        setTimeout(() => {
+            if (!sessionStorage.getItem('subscribeShown')) {
+                openSubscribe();
+                sessionStorage.setItem('subscribeShown', 'true');
+            }
+        }, 5000);
+        
+        // Story data for each lane
+        const laneStories = {
+            'AI': [
+                {
+                    lane: 'AI',
+                    source: 'MIT TECH REVIEW',
+                    title: 'New AI model predicts protein structures 1000x faster than AlphaFold',
+                    blurb: 'Researchers at Stanford unveil ProteinGPT, which could accelerate drug discovery by decades.',
+                    id: 'proteingpt'
+                },
+                {
+                    lane: 'AI',
+                    source: 'NATURE',
+                    title: 'AI system achieves human-level performance in mathematical olympiad',
+                    blurb: 'DeepMind\'s latest model solves complex geometry problems without any training examples.',
+                    id: 'ai-math'
+                },
+                {
+                    lane: 'AI',
+                    source: 'OPENAI',
+                    title: 'ChatGPT usage hits 100 million weekly active users milestone',
+                    blurb: 'The AI chatbot continues its exponential growth with enterprise adoption driving usage.',
+                    id: 'chatgpt-users'
+                },
+                {
+                    lane: 'AI',
+                    source: 'ARXIV',
+                    title: 'Breakthrough in neural network efficiency reduces AI training costs by 90%',
+                    blurb: 'New sparse attention mechanisms allow large language models to train with dramatically less compute power.',
+                    id: 'sparse-attention'
+                },
+                {
+                    lane: 'AI',
+                    source: 'ANTHROPIC',
+                    title: 'Constitutional AI shows 85% reduction in harmful outputs across benchmarks',
+                    blurb: 'New safety training methodology demonstrates significant improvements in AI alignment and helpfulness.',
+                    id: 'constitutional-ai'
+                },
+                {
+                    lane: 'AI',
+                    source: 'DEEPMIND',
+                    title: 'AI agent masters StarCraft II at Grandmaster level using only pixels',
+                    blurb: 'AlphaStar 2.0 achieves superhuman performance without access to game APIs or privileged information.',
+                    id: 'alphastar-2'
+                },
+                {
+                    lane: 'AI',
+                    source: 'HUGGING FACE',
+                    title: 'Open-source AI model matches GPT-4 performance on coding benchmarks',
+                    blurb: 'CodeLlama 2 demonstrates that smaller, specialized models can compete with larger general-purpose ones.',
+                    id: 'codellama-2'
+                },
+                {
+                    lane: 'AI',
+                    source: 'NVIDIA',
+                    title: 'New H200 GPU architecture delivers 4x AI inference speedup',
+                    blurb: 'Advanced tensor cores and memory optimization enable faster deployment of large language models.',
+                    id: 'h200-gpu'
+                },
+                {
+                    lane: 'AI',
+                    source: 'SCALE AI',
+                    title: 'AI data labeling market reaches $2.5B as quality becomes critical differentiator',
+                    blurb: 'Companies invest heavily in high-quality training data as model performance plateaus on web scrapes.',
+                    id: 'data-labeling'
+                },
+                {
+                    lane: 'AI',
+                    source: 'AI SAFETY',
+                    title: 'Researchers develop new method to detect AI-generated deepfakes with 99.8% accuracy',
+                    blurb: 'Novel detection algorithm combines multiple signals to identify synthetic media across platforms.',
+                    id: 'deepfake-detection'
+                }
+            ],
+            'TECH': [
+                {
+                    lane: 'TECH',
+                    source: 'BLOOMBERG',
+                    title: 'Microsoft acquires AI startup for $2.1B in largest deal since GitHub',
+                    blurb: 'The acquisition brings advanced language model capabilities directly into Microsoft 365 and Azure cloud services.',
+                    id: 'microsoft'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'REUTERS',
+                    title: 'Google Cloud revenue jumps 35% as AI services drive growth',
+                    blurb: 'Enterprise customers are rapidly adopting Vertex AI, with usage up 300% quarter-over-quarter.',
+                    id: 'google-cloud'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'WIRED',
+                    title: 'Quantum computing breakthrough achieves 99.9% error correction',
+                    blurb: 'IBM researchers demonstrate stable qubits that maintain coherence for over 100 microseconds.',
+                    id: 'quantum'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'TECHCRUNCH',
+                    title: 'Amazon Web Services launches new serverless database with 10x performance',
+                    blurb: 'Aurora Limitless automatically scales to handle millions of transactions with single-digit millisecond latency.',
+                    id: 'aws-aurora'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'THE INFORMATION',
+                    title: 'Meta develops custom silicon chip to reduce AI inference costs by 50%',
+                    blurb: 'Internal chip project aims to reduce dependency on NVIDIA while powering Instagram and Facebook AI features.',
+                    id: 'meta-chip'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'ARS TECHNICA',
+                    title: 'SpaceX Starlink achieves 1Gbps speeds in low Earth orbit trials',
+                    blurb: 'New laser inter-satellite links enable unprecedented bandwidth for remote locations worldwide.',
+                    id: 'starlink-1gb'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'VENTUREBEAT',
+                    title: 'Enterprise adoption of edge computing grows 200% as latency demands increase',
+                    blurb: 'Companies deploy compute resources closer to users to support real-time AI and IoT applications.',
+                    id: 'edge-computing'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'IEEE SPECTRUM',
+                    title: '6G wireless standard promises 100x faster speeds than current 5G networks',
+                    blurb: 'New terahertz frequency bands and advanced antenna arrays enable unprecedented mobile data rates.',
+                    id: '6g-wireless'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'MIT NEWS',
+                    title: 'Breakthrough in room-temperature superconductors could revolutionize computing',
+                    blurb: 'New material maintains zero electrical resistance at normal temperatures, opening possibilities for quantum computers.',
+                    id: 'superconductors'
+                },
+                {
+                    lane: 'TECH',
+                    source: 'ZDNET',
+                    title: 'Cybersecurity spending reaches $200B globally as threats become more sophisticated',
+                    blurb: 'AI-powered attacks drive enterprise investment in zero-trust architectures and advanced threat detection.',
+                    id: 'cybersecurity-spend'
+                }
+            ],
+            'PRODUCTS': [
+                {
+                    lane: 'PRODUCTS',
+                    source: 'THE VERGE',
+                    title: 'Apple Vision Pro 2 leaked specs show 4K per eye displays',
+                    blurb: 'Internal documents reveal Apple is targeting a $1,999 price point for the next generation headset.',
+                    id: 'vision-pro'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'PRODUCTHUNT',
+                    title: 'Figma launches AI design assistant that creates entire interfaces',
+                    blurb: 'The new feature can generate complete app designs from a single text prompt in under 30 seconds.',
+                    id: 'figma-ai'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'TECHCRUNCH',
+                    title: 'Tesla unveils new Model Y with 400-mile range and faster charging',
+                    blurb: 'The updated electric SUV features new battery technology and improved autonomous driving capabilities.',
+                    id: 'tesla-model-y'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'ENGADGET',
+                    title: 'Google Pixel 9 Pro features revolutionary AI photography that removes any object',
+                    blurb: 'Magic Eraser 2.0 uses advanced neural networks to seamlessly eliminate unwanted elements from photos.',
+                    id: 'pixel-9-ai'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'MACRUMORS',
+                    title: 'MacBook Air M4 benchmarks show 60% performance improvement over M3',
+                    blurb: 'New chip architecture delivers desktop-class performance while maintaining 20-hour battery life.',
+                    id: 'macbook-m4'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'ANDROID AUTHORITY',
+                    title: 'Samsung Galaxy S25 Ultra to feature built-in holographic display technology',
+                    blurb: 'Revolutionary screen can project 3D images without glasses, marking major leap in mobile displays.',
+                    id: 'galaxy-hologram'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'DRONE DJ',
+                    title: 'DJI Air 3S introduces autonomous obstacle avoidance with 360-degree sensors',
+                    blurb: 'Advanced computer vision enables safe flight in complex environments without pilot intervention.',
+                    id: 'dji-air-3s'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'SMART HOME',
+                    title: 'Amazon Echo Show 15 adds gesture control and room mapping capabilities',
+                    blurb: 'New sensors allow hands-free control and automatic optimization based on room layout.',
+                    id: 'echo-gestures'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'CAR AND DRIVER',
+                    title: 'BMW iX2 electric SUV achieves 500-mile range with new battery chemistry',
+                    blurb: 'Solid-state batteries charge to 80% in 10 minutes while delivering unprecedented efficiency.',
+                    id: 'bmw-solid-state'
+                },
+                {
+                    lane: 'PRODUCTS',
+                    source: 'GAMING NEXUS',
+                    title: 'PlayStation 6 dev kits feature 8K 120fps gaming with ray tracing',
+                    blurb: 'Next-generation console targets photorealistic graphics with zero loading times.',
+                    id: 'playstation-6'
+                }
+            ],
+            'DEV': [
+                {
+                    lane: 'DEV',
+                    source: 'GITHUB BLOG',
+                    title: 'GitHub Copilot now writes entire applications from requirements',
+                    blurb: 'The updated AI assistant can scaffold full-stack apps, write tests, and deploy to cloud platforms.',
+                    id: 'copilot'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'STACK OVERFLOW',
+                    title: 'WebAssembly adoption hits 40% among enterprise developers',
+                    blurb: 'Survey data shows WASM is becoming the go-to choice for performance-critical web applications.',
+                    id: 'webassembly'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'VERCEL',
+                    title: 'Next.js 15 introduces React Server Components by default',
+                    blurb: 'The new version promises 50% faster build times and improved developer experience.',
+                    id: 'nextjs-15'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'MOZILLA',
+                    title: 'Firefox unveils new JavaScript engine with 3x faster execution',
+                    blurb: 'SpiderMonkey 2.0 uses advanced JIT compilation to dramatically improve web application performance.',
+                    id: 'spidermonkey-2'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'DOCKER',
+                    title: 'Container adoption surpasses virtual machines in enterprise deployments',
+                    blurb: 'New survey shows 78% of companies now prefer containerized infrastructure for production workloads.',
+                    id: 'container-adoption'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'KUBERNETES',
+                    title: 'Kubernetes 1.30 adds automatic scaling based on custom business metrics',
+                    blurb: 'New HPA features allow pods to scale based on revenue, user engagement, and other KPIs.',
+                    id: 'k8s-business-metrics'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'JETBRAINS',
+                    title: 'IntelliJ IDEA integrates GPT-4 for contextual code suggestions and debugging',
+                    blurb: 'AI assistant understands entire codebases to provide intelligent refactoring and bug fixes.',
+                    id: 'intellij-gpt4'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'RUST FOUNDATION',
+                    title: 'Rust becomes most loved programming language for 8th consecutive year',
+                    blurb: 'Developer survey shows continued growth in adoption for systems programming and web backends.',
+                    id: 'rust-survey'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'NPM',
+                    title: 'Node.js 22 introduces built-in TypeScript support without compilation',
+                    blurb: 'Native TypeScript execution eliminates build steps for faster development iteration.',
+                    id: 'nodejs-typescript'
+                },
+                {
+                    lane: 'DEV',
+                    source: 'GRAFANA',
+                    title: 'New observability platform predicts production issues 30 minutes before they occur',
+                    blurb: 'Machine learning analyzes metrics patterns to provide proactive alerts and remediation suggestions.',
+                    id: 'predictive-monitoring'
+                }
+            ],
+            'CRYPTO': [
+                {
+                    lane: 'CRYPTO',
+                    source: 'COINDESK',
+                    title: 'Ethereum Layer 2 solutions process more transactions than mainnet',
+                    blurb: 'Polygon, Arbitrum, and Optimism combined handle 2.3M daily transactions vs 1.1M on L1.',
+                    id: 'l2-volume'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'DECRYPT',
+                    title: 'Bitcoin ETFs see record $2.4B inflows as institutional adoption grows',
+                    blurb: 'Spot Bitcoin ETFs continue breaking records with BlackRock and Fidelity leading the charge.',
+                    id: 'bitcoin-etf'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'THE BLOCK',
+                    title: 'Solana network handles 65,000 TPS during stress test without downtime',
+                    blurb: 'The blockchain demonstrates improved stability and performance ahead of major DeFi launches.',
+                    id: 'solana-tps'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'COINTELEGRAPH',
+                    title: 'Central Bank Digital Currencies reach 130 countries in pilot or development phases',
+                    blurb: 'Federal Reserve and ECB accelerate CBDC research as digital payment adoption surges globally.',
+                    id: 'cbdc-adoption'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'CHAINALYSIS',
+                    title: 'DeFi total value locked surpasses $200B milestone for first time since 2022',
+                    blurb: 'Renewed interest in decentralized finance driven by improved yields and institutional participation.',
+                    id: 'defi-tvl'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'BINANCE RESEARCH',
+                    title: 'NFT marketplace volume recovers 400% as utility-focused projects gain traction',
+                    blurb: 'Gaming and real-world asset tokenization drive renewed interest beyond digital art collections.',
+                    id: 'nft-utility'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'MESSARI',
+                    title: 'Staking rewards reach $25B annually as Ethereum leads proof-of-stake adoption',
+                    blurb: 'Institutional staking services grow 300% year-over-year as validators seek sustainable yields.',
+                    id: 'staking-rewards'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'COINBASE',
+                    title: 'Corporate treasury Bitcoin holdings exceed $100B as MicroStrategy adds $2B more',
+                    blurb: 'Public companies increasingly view Bitcoin as digital gold for long-term value preservation.',
+                    id: 'corporate-btc'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'DUNE ANALYTICS',
+                    title: 'Cross-chain bridge volume hits $50B monthly as multichain ecosystem matures',
+                    blurb: 'Improved security and user experience drive adoption of interoperability solutions.',
+                    id: 'bridge-volume'
+                },
+                {
+                    lane: 'CRYPTO',
+                    source: 'POLYGON LABS',
+                    title: 'Zero-knowledge rollups achieve 10,000 TPS while maintaining Ethereum security',
+                    blurb: 'zkEVM technology enables massive scalability without compromising decentralization or security.',
+                    id: 'zk-rollups'
+                }
+            ]
+        };
+
+        // Lane positions for sliding
+        const lanePositions = {
+            'AI': 0,
+            'TECH': 1, 
+            'PRODUCTS': 2,
+            'DEV': 3,
+            'CRYPTO': 4
+        };
+        
+        let currentLane = 'TECH';
+        
+        // Generate story HTML
+        function generateStoryHTML(story) {
+            return `
+                <article class="bg-gray-900/50 rounded-lg p-4 border border-gray-800 hover:border-gray-700 transition-colors">
+                    <div class="flex gap-4">
+                        <div class="w-20 h-20 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex-shrink-0 flex items-center justify-center">
+                            <div class="text-xs text-center">
+                                <div class="text-accent font-medium">${story.lane}</div>
+                                <div class="text-gray-400 text-[10px]">${story.source}</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+                                <span class="text-accent uppercase">${story.lane}</span>
+                                <span>•</span>
+                                <span>${story.source}</span>
+                            </div>
+                            <h3 class="font-bold text-sm mb-2 leading-tight">${story.title}</h3>
+                            <p class="text-xs text-gray-400 mb-3 line-clamp-2">${story.blurb}</p>
+                            <button onclick="openBlrb('${story.id}')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-1.5 px-3 rounded text-xs uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+        
+        // Preload all lane content
+        function preloadAllLanes() {
+            Object.keys(laneStories).forEach(laneName => {
+                const stories = laneStories[laneName] || [];
+                const laneElement = document.getElementById(`lane-${laneName}`);
+                if (laneElement) {
+                    laneElement.innerHTML = stories.map(generateStoryHTML).join('');
+                }
+            });
+        }
+        
+        // Slide to specific lane
+        function slideToLane(laneName, distance = 1) {
+            const position = lanePositions[laneName];
+            const container = document.getElementById('storyFeedContainer');
+            
+            // Calculate duration based on distance
+            const duration = Math.min(300 + (distance * 100), 700); // 300ms base + 100ms per position, max 700ms
+            
+            // Set dynamic duration
+            container.style.transitionDuration = duration + 'ms';
+            
+            // Transform to the correct position (-100% per lane position)
+            container.style.transform = `translateX(-${position * 100}%)`;
+            
+            currentLane = laneName;
+        }
+
+        // Lane selection function
+        function selectLane(clickedBtn) {
+            const newLane = clickedBtn.textContent;
+            
+            // Check if this lane is already selected
+            if (newLane === currentLane) {
+                return;
+            }
+            
+            // Calculate distance for animation duration
+            const currentPos = lanePositions[currentLane];
+            const newPos = lanePositions[newLane];
+            const distance = Math.abs(newPos - currentPos);
+            
+            // Remove selected class from all lane buttons
+            document.querySelectorAll('.lane-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked button
+            clickedBtn.classList.add('selected');
+            
+            // Slide to the new lane
+            slideToLane(newLane, distance);
+            
+            console.log(`Selected lane: ${newLane}, Distance: ${distance}`);
+        }
+
+        // Touch/Swipe handling variables
+        let startX = 0;
+        let startY = 0;
+        let isDragging = false;
+        let startTime = 0;
+        
+        // Today's Hits horizontal scrolling
+        function setupHitsScrolling() {
+            const hitsContainer = document.getElementById('hitsContainer');
+            const hitsScrollLeft = document.getElementById('hitsScrollLeft');
+            const hitsScrollRight = document.getElementById('hitsScrollRight');
+            
+            if (hitsScrollLeft && hitsScrollRight && hitsContainer) {
+                hitsScrollLeft.addEventListener('click', () => {
+                    hitsContainer.scrollBy({
+                        left: -320, // Width of one card plus gap
+                        behavior: 'smooth'
+                    });
+                });
+                
+                hitsScrollRight.addEventListener('click', () => {
+                    hitsContainer.scrollBy({
+                        left: 320, // Width of one card plus gap
+                        behavior: 'smooth'
+                    });
+                });
+                
+                // Update scroll button visibility
+                function updateScrollButtons() {
+                    const { scrollLeft, scrollWidth, clientWidth } = hitsContainer;
+                    hitsScrollLeft.style.opacity = scrollLeft > 0 ? '1' : '0.5';
+                    hitsScrollRight.style.opacity = scrollLeft < scrollWidth - clientWidth ? '1' : '0.5';
+                }
+                
+                hitsContainer.addEventListener('scroll', updateScrollButtons);
+                updateScrollButtons(); // Initial state
+            }
+        }
+
+        // Dropdown Menu Functions
+        let isMenuOpen = false;
+        
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            
+            if (isMenuOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+        
+        function openDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            
+            dropdown.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+            dropdown.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+            
+            isMenuOpen = true;
+        }
+        
+        function closeDropdown() {
+            const dropdown = document.getElementById('dropdownMenu');
+            
+            dropdown.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+            dropdown.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            
+            isMenuOpen = false;
+        }
+        
+        function setupMenuHandlers() {
+            const menuToggle = document.getElementById('menuToggle');
+            
+            // Toggle dropdown on hamburger click
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown();
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (isMenuOpen) {
+                    closeDropdown();
+                }
+            });
+            
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeDropdown();
+                }
+            });
+            
+            // Prevent dropdown from closing when clicking inside it
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            // Preload all content first
+            preloadAllLanes();
+            
+            // Set initial position to TECH (position 1)
+            slideToLane('TECH', 0);
+            
+            // Add swipe event listeners
+            setupSwipeHandlers();
+            
+            // Setup hits scrolling
+            setupHitsScrolling();
+            
+            // Setup menu handlers
+            setupMenuHandlers();
+        });
+        
+        function setupSwipeHandlers() {
+            const swipeArea = document.getElementById('swipeArea');
+            
+            // Mouse events (for desktop testing)
+            swipeArea.addEventListener('mousedown', handleStart, { passive: true });
+            swipeArea.addEventListener('mousemove', handleMove, { passive: true });
+            swipeArea.addEventListener('mouseup', handleEnd, { passive: true });
+            swipeArea.addEventListener('mouseleave', handleEnd, { passive: true });
+            
+            // Touch events (for mobile)
+            swipeArea.addEventListener('touchstart', handleStart, { passive: true });
+            swipeArea.addEventListener('touchmove', handleMove, { passive: true });
+            swipeArea.addEventListener('touchend', handleEnd, { passive: true });
+        }
+        
+        function getClientX(e) {
+            return e.clientX || (e.touches && e.touches[0].clientX);
+        }
+        
+        function getClientY(e) {
+            return e.clientY || (e.touches && e.touches[0].clientY);
+        }
+        
+        function handleStart(e) {
+            startX = getClientX(e);
+            startY = getClientY(e);
+            startTime = Date.now();
+            isDragging = false;
+        }
+        
+        function handleMove(e) {
+            if (!startX || !startY) return;
+            
+            const currentX = getClientX(e);
+            const currentY = getClientY(e);
+            const diffX = Math.abs(currentX - startX);
+            const diffY = Math.abs(currentY - startY);
+            
+            // Determine if this is a horizontal swipe (more horizontal than vertical movement)
+            if (diffX > diffY && diffX > 10) {
+                isDragging = true;
+                // Prevent vertical scrolling when swiping horizontally
+                e.preventDefault();
+            }
+        }
+        
+        function handleEnd(e) {
+            if (!startX || !startY || !isDragging) {
+                startX = 0;
+                startY = 0;
+                isDragging = false;
+                return;
+            }
+            
+            const endX = getClientX(e) || startX;
+            const endTime = Date.now();
+            const timeDiff = endTime - startTime;
+            const distance = endX - startX;
+            
+            // Require minimum distance and maximum time for a valid swipe
+            const minSwipeDistance = 50;
+            const maxSwipeTime = 500;
+            
+            if (Math.abs(distance) >= minSwipeDistance && timeDiff <= maxSwipeTime) {
+                const laneNames = Object.keys(lanePositions);
+                const currentIndex = lanePositions[currentLane];
+                
+                if (distance > 0) {
+                    // Swipe right - go to previous lane
+                    if (currentIndex > 0) {
+                        const newLane = laneNames[currentIndex - 1];
+                        swipeToLane(newLane);
+                    }
+                } else {
+                    // Swipe left - go to next lane
+                    if (currentIndex < laneNames.length - 1) {
+                        const newLane = laneNames[currentIndex + 1];
+                        swipeToLane(newLane);
+                    }
+                }
+            }
+            
+            // Reset
+            startX = 0;
+            startY = 0;
+            isDragging = false;
+        }
+        
+        function swipeToLane(newLane) {
+            // Update lane button selection
+            document.querySelectorAll('.lane-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.textContent === newLane) {
+                    btn.classList.add('selected');
+                }
+            });
+            
+            // Calculate distance for animation
+            const currentPos = lanePositions[currentLane];
+            const newPos = lanePositions[newLane];
+            const distance = Math.abs(newPos - currentPos);
+            
+            // Slide to the new lane
+            slideToLane(newLane, distance);
+            
+            console.log(`Swiped to lane: ${newLane}`);
+        }
+    </script>
+</body>
+</html>
