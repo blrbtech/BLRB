@@ -41,7 +41,8 @@
             scroll-snap-align: center;
         }
         .lane-btn.selected {
-            color: #00b4ff !important;
+            background-color: #00b4ff;
+            color: white !important;
         }
         
         /* Story feed container animations */
@@ -139,7 +140,7 @@
                 
                 <div id="hitsContainer" class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide" style="scroll-behavior: smooth;">
                 <!-- Hit 1: GPT-5 -->
-                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('gpt5')">
+                <div class="flex-none w-full snap-center group px-4">
                     <div class="bg-gray-900 -lg overflow-hidden mb-4 relative">
                         <div class="aspect-video bg-gradient-to-br from-blue-600/10 to-cyan-600/10 flex items-center justify-center relative">
                             <!-- Gradients that match this exact aspect-video height -->
@@ -152,10 +153,10 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-bold text-lg leading-tight">OpenAI announces GPT-5 with unprecedented reasoning capabilities</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">The latest model can solve complex multi-step problems and shows emergent mathematical abilities that surprised even its creators.</p>
+                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="window.open('#', '_blank')">OpenAI announces GPT-5 with unprecedented reasoning capabilities</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="window.open('#', '_blank')">The latest model can solve complex multi-step problems and shows emergent mathematical abilities that surprised even its creators.</p>
                         <div class="pt-0">
-                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
+                            <button onclick="openBlrb('gpt5')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
                                 BLRB
                             </button>
                         </div>
@@ -163,7 +164,7 @@
                 </div>
                 
                 <!-- Hit 2: Vision Pro -->
-                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('vision-pro')">
+                <div class="flex-none w-full snap-center group px-4">
                     <div class="bg-gray-900 -lg overflow-hidden mb-4 relative">
                         <div class="aspect-video bg-gradient-to-br from-purple-600/10 to-pink-600/10 flex items-center justify-center relative">
                             <!-- Gradients that match this exact aspect-video height -->
@@ -176,10 +177,10 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-bold text-lg leading-tight">Apple Vision Pro 2 leaked specs show 4K per eye displays</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">Internal documents reveal Apple is targeting a $1,999 price point for the next generation headset, launching Q2 2025.</p>
+                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="window.open('#', '_blank')">Apple Vision Pro 2 leaked specs show 4K per eye displays</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="window.open('#', '_blank')">Internal documents reveal Apple is targeting a $1,999 price point for the next generation headset, launching Q2 2025.</p>
                         <div class="pt-0">
-                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
+                            <button onclick="openBlrb('vision-pro')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
                                 BLRB
                             </button>
                         </div>
@@ -187,7 +188,7 @@
                 </div>
                 
                 <!-- Hit 3: Microsoft AI -->
-                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('microsoft')">
+                <div class="flex-none w-full snap-center group px-4">
                     <div class="bg-gray-900 -lg overflow-hidden mb-4 relative">
                         <div class="aspect-video bg-gradient-to-br from-green-600/10 to-blue-600/10 flex items-center justify-center relative">
                             <!-- Gradients that match this exact aspect-video height -->
@@ -200,10 +201,10 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-bold text-lg leading-tight">Microsoft acquires AI startup for $2.1B in largest deal since GitHub</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">The acquisition brings advanced language model capabilities directly into Microsoft 365 and Azure cloud services.</p>
+                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="window.open('#', '_blank')">Microsoft acquires AI startup for $2.1B in largest deal since GitHub</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="window.open('#', '_blank')">The acquisition brings advanced language model capabilities directly into Microsoft 365 and Azure cloud services.</p>
                         <div class="pt-0">
-                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
+                            <button onclick="openBlrb('microsoft')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
                                 BLRB
                             </button>
                         </div>
@@ -211,7 +212,7 @@
                 </div>
                 
                 <!-- Hit 4: GitHub Copilot -->
-                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('copilot')">
+                <div class="flex-none w-full snap-center group px-4">
                     <div class="bg-gray-900 -lg overflow-hidden mb-4 relative">
                         <div class="aspect-video bg-gradient-to-br from-orange-600/10 to-red-600/10 flex items-center justify-center relative">
                             <!-- Gradients that match this exact aspect-video height -->
@@ -224,10 +225,10 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-bold text-lg leading-tight">GitHub Copilot Workspace launches with full IDE integration</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">The AI-powered coding environment can now generate entire project structures and handle complex refactoring tasks autonomously.</p>
+                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="window.open('#', '_blank')">GitHub Copilot Workspace launches with full IDE integration</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="window.open('#', '_blank')">The AI-powered coding environment can now generate entire project structures and handle complex refactoring tasks autonomously.</p>
                         <div class="pt-0">
-                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
+                            <button onclick="openBlrb('copilot')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
                                 BLRB
                             </button>
                         </div>
@@ -235,7 +236,7 @@
                 </div>
                 
                 <!-- Hit 5: Ethereum Staking -->
-                <div class="flex-none w-full snap-center cursor-pointer group px-4" onclick="openBlrb('ethereum-staking')">
+                <div class="flex-none w-full snap-center group px-4">
                     <div class="bg-gray-900 -lg overflow-hidden mb-4 relative">
                         <div class="aspect-video bg-gradient-to-br from-indigo-600/10 to-purple-600/10 flex items-center justify-center relative">
                             <!-- Gradients that match this exact aspect-video height -->
@@ -248,10 +249,10 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-bold text-lg leading-tight">Ethereum 2.0 staking rewards hit new high as adoption surges</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed">Over 32 million ETH now staked as institutional investors embrace proof-of-stake rewards averaging 4.2% APY.</p>
+                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="window.open('#', '_blank')">Ethereum 2.0 staking rewards hit new high as adoption surges</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="window.open('#', '_blank')">Over 32 million ETH now staked as institutional investors embrace proof-of-stake rewards averaging 4.2% APY.</p>
                         <div class="pt-0">
-                            <button class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
+                            <button onclick="openBlrb('ethereum-staking')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
                                 BLRB
                             </button>
                         </div>
@@ -264,12 +265,12 @@
         <div class="h-0.5 bg-gradient-to-r from-primary to-accent -full mb-6"></div>
 
         <!-- Lane Navigation -->
-        <div class="flex gap-12 overflow-x-auto pb-4 mb-6 justify-center" id="laneNav">
-            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">AI</button>
-            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors selected">TECH</button>
-            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">PRODUCTS</button>
-            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">DEV</button>
-            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-colors">CRYPTO</button>
+        <div class="flex gap-4 sm:gap-8 md:gap-12 overflow-x-auto scrollbar-hide pb-4 mb-6 justify-center items-center min-h-[3rem]" id="laneNav">
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-all py-2 px-4 rounded-lg">AI</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-all py-2 px-4 rounded-lg selected">TECH</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-all py-2 px-4 rounded-lg">PRODUCTS</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-all py-2 px-4 rounded-lg">DEV</button>
+            <button onclick="selectLane(this)" class="lane-btn flex-shrink-0 text-white hover:text-primary font-medium text-xs uppercase tracking-wider transition-all py-2 px-4 rounded-lg">CRYPTO</button>
         </div>
 
         <!-- Story Feed Container -->
