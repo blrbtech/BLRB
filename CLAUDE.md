@@ -10,19 +10,24 @@ BLRB (newsletter for builders) is a tech newsletter website project that has bee
 
 The project now has a complete, working demonstration website with advanced features:
 
-### Primary Working File
-- **`blrb-demo-v2.html`** - Main production-ready demo with all features
+### Primary Working Files
+- **`index.html`** - Main production-ready demo with latest enhancements
+- **`blrb-demo-v2.html`** - Alternative demo version
+  
+Both files feature:
   - Complete lane system (AI, TECH, PRODUCTS, DEV, CRYPTO)
-  - Full-width "Today's Hits" carousel with perfect gradients and arrows
+  - Full-width "Today's Hits" carousel with optimized gradients and smart arrows
   - Mobile swipe gestures between lanes
   - Bottom sheet BLRB explainer panels
   - Professional subscribe popup with form fields
   - Clean hamburger menu with navigation
   - Smooth animations and transitions
+  - Modern article card design with sharp corners
 
 ### Development Setup
 - **Local Server**: Use `python -m http.server 8000` for proper file serving
-- **Access URL**: `http://localhost:8000/blrb-demo-v2.html`
+- **Primary URL**: `http://localhost:8000/index.html` (latest version)
+- **Alternative URL**: `http://localhost:8000/blrb-demo-v2.html`
 - **Testing**: Both desktop and mobile interactions work seamlessly
 
 ## Technical Architecture
@@ -48,8 +53,9 @@ The project now has a complete, working demonstration website with advanced feat
 
 ```
 F:\BLRB\3_WEBSITE/
-├── blrb-demo-v2.html           # ✅ MAIN WORKING DEMO - Full featured site
-├── blrb-demo.html              # ⚠️  Simpler demo - Less features
+├── index.html                  # ✅ PRIMARY DEMO - Latest version with all enhancements
+├── blrb-demo-v2.html           # ✅ ALTERNATIVE DEMO - Full featured site
+├── blrb-demo.html              # ⚠️  Legacy demo - Basic features
 ├── BLRB_FRONTEND_LLM.json      # 📋 Original specification document
 ├── BLRB_FRONT_END_MOCK_UP.png  # 🎨 Design mockup reference
 ├── CLAUDE.md                   # 📝 This documentation file
@@ -70,8 +76,10 @@ F:\BLRB\3_WEBSITE/
 ### Today's Hits Carousel
 - **5 Featured Stories**: GPT-5, Vision Pro 2, Microsoft AI Deal, Copilot Workspace, Ethereum Staking
 - **Full-Width Design**: Extends edge-to-edge with single story visibility
-- **Gradient Overlays**: Black-to-transparent gradients on left/right edges (aspect-video only)
-- **Centered Arrows**: Blue directional arrows positioned precisely on visual content
+- **Optimized Gradients**: Soft black-to-transparent fade (80% → 20% → transparent)
+- **Smart Navigation Arrows**: Only visible when scrolling is possible (hide at first/last)
+- **Clean Interactions**: Headlines/text link to articles, BLRB buttons open detailed views
+- **No Source Labels**: Streamlined design without redundant topic/source text
 - **Smooth Scrolling**: CSS snap points with proper touch support
 - **Hidden Scrollbars**: Clean visual appearance
 
@@ -90,9 +98,9 @@ F:\BLRB\3_WEBSITE/
 
 ### To Continue Development:
 1. **Start Local Server**: `python -m http.server 8000`
-2. **Open Demo**: Navigate to `http://localhost:8000/blrb-demo-v2.html`
-3. **Edit HTML File**: Make changes to `blrb-demo-v2.html`
-4. **Test Features**: Verify lane switching, hits scrolling, mobile swipe
+2. **Open Demo**: Navigate to `http://localhost:8000/index.html` (primary) or `blrb-demo-v2.html`
+3. **Edit HTML File**: Make changes to `index.html` for latest version
+4. **Test Features**: Verify lane switching, hits scrolling, mobile swipe, article interactions
 
 ### Key Functions to Know:
 - `selectLane(button)` - Handles lane navigation clicks
@@ -107,9 +115,14 @@ F:\BLRB\3_WEBSITE/
 
 ### Testing Checklist:
 - ✅ Desktop lane clicking works
-- ✅ Mobile swiping between lanes works
-- ✅ Today's Hits full-width carousel with gradients works
-- ✅ Today's Hits arrows positioned correctly on aspect-video
+- ✅ Mobile swiping between lanes works  
+- ✅ Lane selection shows blue rounded rectangle (not just text color)
+- ✅ Lanes properly span full width on mobile without scrolling
+- ✅ Today's Hits carousel with optimized gradients works
+- ✅ Smart arrows hide/show based on scroll position
+- ✅ Today's Hits click behavior: thumbnails inactive, headlines/text link out, BLRB opens sheets
+- ✅ Article cards have modern layout with right-side 9:16 thumbnails
+- ✅ All elements have sharp corners (no rounded borders)
 - ✅ BLRB bottom sheets open/close
 - ✅ Hamburger menu dropdown opens/closes
 - ✅ Newsletter menu item opens subscribe popup
@@ -151,7 +164,10 @@ F:\BLRB\3_WEBSITE/
 # Start development server
 python -m http.server 8000
 
-# Open main demo
+# Open primary demo (latest)
+start http://localhost:8000/index.html
+
+# Open alternative demo
 start http://localhost:8000/blrb-demo-v2.html
 
 # View files
@@ -160,13 +176,20 @@ ls F:\BLRB\3_WEBSITE
 
 ## Recent Major Updates
 
+### August 12, 2025 - UX Enhancements & Modern Card Design
+- **Today's Hits Improvements**: White heading text, reduced gradient opacity (20% → 10%), softer edge transitions
+- **Smart Navigation**: Arrows only show when scrolling is possible, eliminated redundant source labels
+- **Click Behavior Optimization**: Headlines/paragraphs link to articles, BLRB buttons open detailed views
+- **Lane Navigation Redesign**: Blue rounded rectangle selection instead of text color, responsive full-width mobile layout
+- **Modern Article Cards**: Sharp corners throughout, right-side 9:16 portrait thumbnails, top-right BLRB buttons
+- **Typography Hierarchy**: Improved text sizing and spacing for better readability
+
 ### August 11, 2025 - Navigation & Form Enhancements
 - **Hamburger Menu**: Added clean dropdown navigation (Newsletter/About Us/Contact)
 - **Subscribe Popup Redesign**: Added First Name and Email form fields
 - **Typography Improvements**: Larger BLRB logo, bigger blue feature headings
 - **Design Refinements**: Sharp corners throughout, tighter spacing, better alignment
 - **Integration**: Newsletter menu item connects to subscribe popup
-- **Today's Hits Polish**: Perfect full-width gradients and arrow positioning
 
 ---
-*Last updated: August 11, 2025 - Navigation system and subscribe form enhancements complete*
+*Last updated: August 12, 2025 - Modern card design and enhanced user experience complete*

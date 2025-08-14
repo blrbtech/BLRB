@@ -288,35 +288,36 @@
 
     <!-- Subscribe Popup -->
     <div id="subscribePopup" class="subscribe-popup fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-gray-900 border border-gray-700 p-6 max-w-sm w-full">
+        <div class="bg-gradient-to-r from-primary to-accent p-0.5 max-w-sm w-full">
+            <div class="bg-gray-900 p-6 w-full h-full">
             <button onclick="closeSubscribe()" class="float-right text-gray-400 hover:text-white">✕</button>
             <div class="mb-6">
-                <div class="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+                <div class="text-4xl font-bold bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent mb-2">
                     BLRB
                 </div>
-                <h3 class="font-bold mb-2">THE NEWSLETTER FOR BUILDERS</h3>
-                <p class="text-sm text-gray-400">BLRB gives you today's top tech stories and shows you how to turn them into opportunities.</p>
+                <h2 class="font-bold mb-2 text-lg uppercase">THE NEWSLETTER FOR PEOPLE WHO MAKE THINGS HAPPEN</h2>
+                <p class="text-sm text-gray-400">BLRB breaks down the biggest tech shifts and shows you how to turn them into projects worth building.</p>
             </div>
             
             <div class="space-y-4 mb-6">
                 <div class="space-y-0.5">
-                    <div class="text-base font-bold text-primary uppercase tracking-wide">CUT THROUGH THE NOISE</div>
-                    <p class="text-xs text-gray-400">Only the biggest tech shifts, no filler or fluff.</p>
+                    <div class="text-base font-bold text-white uppercase tracking-wide">SPOT THE SIGNALS</div>
+                    <p class="text-xs text-gray-400">See the tech shifts that matter before everyone else.</p>
                 </div>
                 
                 <div class="space-y-0.5">
-                    <div class="text-base font-bold text-primary uppercase tracking-wide">ACTIONABLE IDEAS</div>
-                    <p class="text-xs text-gray-400">Turn today's trends into tomorrow's wins.</p>
+                    <div class="text-base font-bold text-white uppercase tracking-wide">TURN INSIGHT INTO ACTION</div>
+                    <p class="text-xs text-gray-400">Every story comes with ideas you can start building today.</p>
                 </div>
                 
                 <div class="space-y-0.5">
-                    <div class="text-base font-bold text-primary uppercase tracking-wide">FAST FORMAT</div>
-                    <p class="text-xs text-gray-400">Get it in minutes, use it all day.</p>
+                    <div class="text-base font-bold text-white uppercase tracking-wide">BUILT FOR SPEED</div>
+                    <p class="text-xs text-gray-400">A quick read that fuels you for the rest of the day.</p>
                 </div>
                 
                 <div class="space-y-0.5">
-                    <div class="text-base font-bold text-primary uppercase tracking-wide">NO SPAM, EVER</div>
-                    <p class="text-xs text-gray-400">We'll never share, sell, or trade your information — period.</p>
+                    <div class="text-base font-bold text-white uppercase tracking-wide">ALWAYS FRESH</div>
+                    <p class="text-xs text-gray-400">Every 24 hours you get a new set of builder-ready ideas. Miss a day, and those shifts move on without you.</p>
                 </div>
             </div>
             
@@ -340,6 +341,7 @@
                     SUBSCRIBE
                 </button>
             </div>
+        </div>
         </div>
     </div>
 
@@ -843,25 +845,18 @@
         // Generate story HTML
         function generateStoryHTML(story) {
             return `
-                <article class="bg-gray-900/50 p-4 border border-gray-800 hover:border-gray-700 transition-colors relative">
-                    <button onclick="openBlrb('${story.id}')" class="absolute top-2 right-2 bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-1 px-2 text-[10px] uppercase tracking-wide transition-all z-10">
-                        BLRB
-                    </button>
-                    <div class="flex gap-4">
-                        <div class="flex-1 min-w-0 pr-2">
-                            <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
-                                <span class="text-accent uppercase font-medium">${story.lane}</span>
-                                <span>•</span>
-                                <span>${story.source}</span>
-                            </div>
-                            <h3 class="font-bold text-base mb-3 leading-tight">${story.title}</h3>
-                            <p class="text-sm text-gray-300 leading-relaxed">${story.blurb}</p>
-                        </div>
-                        <div class="w-12 aspect-[9/16] bg-gradient-to-br from-gray-700 to-gray-800 flex-shrink-0 flex items-center justify-center">
-                            <div class="text-xs text-center">
-                                <div class="text-accent font-bold text-[10px]">${story.lane}</div>
-                            </div>
-                        </div>
+                <article class="bg-gray-900/50 p-4 border border-gray-800 hover:border-gray-700 transition-colors">
+                    <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+                        <span class="text-accent uppercase font-medium">${story.lane}</span>
+                        <span>•</span>
+                        <span>${story.source}</span>
+                    </div>
+                    <h3 class="font-bold text-base mb-3 leading-tight">${story.title}</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed mb-3">${story.blurb}</p>
+                    <div class="flex justify-start">
+                        <button onclick="openBlrb('${story.id}')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-1.5 px-3 text-xs uppercase tracking-wide transition-all">
+                            BLRB
+                        </button>
                     </div>
                 </article>
             `;
