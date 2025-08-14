@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLRB - The Newsletter for Builders</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8NLHDPTR6M"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8NLHDPTR6M');
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -153,8 +162,8 @@
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="window.open('#', '_blank')">OpenAI announces GPT-5 with unprecedented reasoning capabilities</h3>
-                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="window.open('#', '_blank')">The latest model can solve complex multi-step problems and shows emergent mathematical abilities that surprised even its creators.</p>
+                        <h3 class="font-bold text-lg leading-tight cursor-pointer hover:text-primary transition-colors" onclick="trackHitsClick('OpenAI GPT-5')">OpenAI announces GPT-5 with unprecedented reasoning capabilities</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed cursor-pointer hover:text-gray-300 transition-colors" onclick="trackHitsClick('OpenAI GPT-5')">The latest model can solve complex multi-step problems and shows emergent mathematical abilities that surprised even its creators.</p>
                         <div class="pt-0">
                             <button onclick="openBlrb('gpt5')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-2.5 px-6  text-base uppercase tracking-wide transition-all">
                                 BLRB
@@ -337,7 +346,7 @@
                     class="w-full bg-gray-800 border border-gray-600 px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
                     placeholder="Email Address"
                 />
-                <button class="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-3 px-6 uppercase tracking-wide transition-all">
+                <button onclick="handleNewsletterSubmit()" class="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-3 px-6 uppercase tracking-wide transition-all">
                     SUBSCRIBE
                 </button>
             </div>
@@ -424,6 +433,12 @@
         function openSubscribe() {
             document.getElementById('subscribePopup').classList.add('open');
             document.body.style.overflow = 'hidden';
+            
+            // Track newsletter popup opened
+            gtag('event', 'newsletter_popup_opened', {
+                event_category: 'engagement',
+                event_label: 'newsletter_signup'
+            });
         }
         
         function closeSubscribe() {
@@ -431,11 +446,56 @@
             document.body.style.overflow = 'auto';
         }
         
+        function handleNewsletterSubmit() {
+            const firstName = document.getElementById('firstName').value;
+            const email = document.getElementById('email').value;
+            
+            if (firstName && email) {
+                // Track newsletter signup
+                gtag('event', 'newsletter_signup', {
+                    event_category: 'conversion',
+                    event_label: 'newsletter_form_submitted',
+                    custom_parameters: {
+                        has_first_name: !!firstName,
+                        has_email: !!email
+                    }
+                });
+                
+                // Here you would normally send to your email service
+                alert('Thanks for subscribing to BLRB!');
+                closeSubscribe();
+            } else {
+                alert('Please fill in both fields');
+            }
+        }
+        
+        function trackHitsClick(storyTitle) {
+            // Track Today's Hits headline/text clicks
+            gtag('event', 'todays_hits_clicked', {
+                event_category: 'engagement',
+                event_label: storyTitle,
+                custom_parameters: {
+                    story_title: storyTitle
+                }
+            });
+            // Then open the link (currently just placeholder)
+            window.open('#', '_blank');
+        }
+        
         function openBlrb(storyId) {
             document.getElementById('blrbSheet').classList.add('open');
             document.getElementById('backdrop').style.opacity = '1';
             document.getElementById('backdrop').style.pointerEvents = 'all';
             document.body.style.overflow = 'hidden';
+            
+            // Track BLRB button clicks
+            gtag('event', 'blrb_clicked', {
+                event_category: 'engagement',
+                event_label: storyId,
+                custom_parameters: {
+                    story_id: storyId
+                }
+            });
             
             // Update content based on story
             console.log('Opening BLRB for:', storyId);
@@ -897,6 +957,17 @@
             // Check if this lane is already selected
             if (newLane === currentLane) {
                 return;
+            }
+            
+            // Track lane navigation
+            gtag('event', 'lane_changed', {
+                event_category: 'navigation',
+                event_label: newLane,
+                custom_parameters: {
+                    from_lane: currentLane,
+                    to_lane: newLane
+                }
+            });
             }
             
             // Calculate distance for animation duration
