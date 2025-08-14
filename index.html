@@ -434,6 +434,13 @@
         function openSubscribe() {
             document.getElementById('subscribePopup').classList.add('open');
             document.body.style.overflow = 'hidden';
+            
+            // Track newsletter popup opened
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'newsletter_popup_opened', {
+                    event_category: 'engagement'
+                });
+            }
         }
         
         function closeSubscribe() {
