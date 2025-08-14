@@ -48,6 +48,7 @@ Both files feature:
 6. **Professional Subscribe Form** - Name/email fields with refined typography
 7. **Hamburger Menu** - Clean dropdown with Newsletter/About/Contact
 8. **Responsive Design** - Mobile-first with desktop enhancements
+9. **Analytics Tracking** - Google Analytics 4 with custom events for user behavior
 
 ## File Structure & Status
 
@@ -93,6 +94,15 @@ F:\BLRB\3_WEBSITE/
 - **Story Objects**: Each has lane, source, title, blurb, and unique ID
 - **Mock Publishers**: TechCrunch, The Verge, Bloomberg, GitHub, CoinDesk, etc.
 - **Realistic Content**: All articles have believable tech news headlines
+
+### Analytics Implementation
+- **Google Analytics 4**: Property ID G-8NLHDPTR6M integrated in head section
+- **Custom Events Tracked**:
+  - `newsletter_popup_opened` - User engagement with signup form
+  - `blrb_clicked` - Story engagement with unique story IDs
+  - `lane_changed` - Content category browsing patterns
+- **Safety Checks**: All tracking includes `typeof gtag !== 'undefined'` error handling
+- **Event Categories**: engagement, navigation for organized reporting
 
 ## Development Workflow
 
@@ -176,6 +186,14 @@ ls F:\BLRB\3_WEBSITE
 
 ## Recent Major Updates
 
+### August 14, 2025 - Analytics Integration & Newsletter UX Enhancements
+- **Google Analytics 4**: Integrated GA4 tracking (G-8NLHDPTR6M) with custom events
+- **Newsletter Popup Redesign**: Updated copy to "People Who Make Things Happen" with action-focused messaging
+- **Enhanced Selling Points**: New copy - "Spot the Signals", "Turn Insight Into Action", "Built for Speed", "Always Fresh"  
+- **Article Card Redesign**: Removed thumbnail images, repositioned BLRB button to bottom-left for cleaner content focus
+- **Gradient Popup Border**: Added gradient border around newsletter popup for visual appeal
+- **Analytics Events**: Tracking newsletter opens, BLRB clicks with story IDs, and lane navigation patterns
+
 ### August 12, 2025 - UX Enhancements & Modern Card Design
 - **Today's Hits Improvements**: White heading text, reduced gradient opacity (20% → 10%), softer edge transitions
 - **Smart Navigation**: Arrows only show when scrolling is possible, eliminated redundant source labels
@@ -192,4 +210,4 @@ ls F:\BLRB\3_WEBSITE
 - **Integration**: Newsletter menu item connects to subscribe popup
 
 ---
-*Last updated: August 12, 2025 - Modern card design and enhanced user experience complete*
+*Last updated: August 14, 2025 - Analytics integration and newsletter UX optimization complete*
