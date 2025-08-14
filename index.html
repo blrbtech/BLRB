@@ -44,6 +44,24 @@
             opacity: 1;
             pointer-events: all;
         }
+        .about-popup {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+        }
+        .about-popup.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .contact-popup {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+        }
+        .contact-popup.open {
+            opacity: 1;
+            pointer-events: all;
+        }
         .carousel-snap {
             scroll-snap-type: x mandatory;
         }
@@ -114,12 +132,12 @@
                             <button onclick="openSubscribe(); closeDropdown();" class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
                                 Newsletter
                             </button>
-                            <a href="#about" class="block px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
-                                About Us
-                            </a>
-                            <a href="#contact" class="block px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
+                            <button onclick="openAbout(); closeDropdown();" class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
+                                About BLRB
+                            </button>
+                            <button onclick="openContact(); closeDropdown();" class="block w-full text-left px-4 py-3 text-sm font-medium text-white hover:text-primary hover:bg-gray-800 transition-colors uppercase tracking-wide">
                                 Contact
-                            </a>
+                            </button>
                         </nav>
                     </div>
                 </div>
@@ -355,6 +373,114 @@
         </div>
     </div>
 
+    <!-- About BLRB Popup -->
+    <div id="aboutPopup" class="about-popup fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-gradient-to-r from-primary to-accent p-0.5 max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div class="bg-gray-900 p-6 w-full h-full">
+            <button onclick="closeAbout()" class="float-right text-gray-400 hover:text-white">✕</button>
+            <div class="mb-6">
+                <div class="text-4xl font-bold bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent mb-2">
+                    BLRB
+                </div>
+                <h2 class="font-bold mb-4 text-lg uppercase">About BLRB</h2>
+                <p class="text-sm text-gray-300 leading-relaxed mb-6">BLRB is a daily builder brief. It turns today's tech shifts into projects worth building. Each issue is small on purpose. You get the key stories in plain English and practical plays with clear steps. The aim is simple: turn ideas into products and viable businesses with consistent, hard work. The goal is a net positive for society, built by you.</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <div class="text-base font-bold text-white uppercase tracking-wide mb-3">How it works</div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="text-sm font-bold text-accent uppercase tracking-wide mb-1">Scan and select</div>
+                            <p class="text-xs text-gray-400">Each morning, BLRB pulls a small set of stories that matter for builders.</p>
+                        </div>
+                        
+                        <div>
+                            <div class="text-sm font-bold text-accent uppercase tracking-wide mb-1">Distill</div>
+                            <p class="text-xs text-gray-400">Short briefs in plain English, with the source linked.</p>
+                        </div>
+                        
+                        <div>
+                            <div class="text-sm font-bold text-accent uppercase tracking-wide mb-1">Explain the why</div>
+                            <p class="text-xs text-gray-400">What changed and what it unlocks if you're building.</p>
+                        </div>
+                        
+                        <div>
+                            <div class="text-sm font-bold text-accent uppercase tracking-wide mb-1">Add the Play</div>
+                            <p class="text-xs text-gray-400">Clear steps you can start today.</p>
+                        </div>
+                        
+                        <div>
+                            <div class="text-sm font-bold text-accent uppercase tracking-wide mb-1">Publish and refresh</div>
+                            <p class="text-xs text-gray-400">The set goes live, the BLRB button opens a quick breakdown on any item, and a new set replaces it every 24 hours.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="text-base font-bold text-white uppercase tracking-wide mb-2">The BLRB Button</div>
+                    <p class="text-xs text-gray-400">Tap for the quick breakdown: what happened, why it matters if you're building, and plays to start today.</p>
+                </div>
+                
+                <div>
+                    <div class="text-base font-bold text-white uppercase tracking-wide mb-2">Who it's for</div>
+                    <p class="text-xs text-gray-400">People who make their own momentum and keep showing up. You try things, ship small, improve, and move to the next step without waiting. You set your own bar and want ideas you can act on right now.</p>
+                </div>
+                
+                <div>
+                    <div class="text-base font-bold text-white uppercase tracking-wide mb-2">What BLRB isn't</div>
+                    <p class="text-xs text-gray-400">Not a shortcut, not for people looking for easy wins without the work, not an endless stream of links, not clickbait, and not financial advice.</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Contact Popup -->
+    <div id="contactPopup" class="contact-popup fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-gradient-to-r from-primary to-accent p-0.5 max-w-sm w-full">
+            <div class="bg-gray-900 p-6 w-full h-full">
+            <button onclick="closeContact()" class="float-right text-gray-400 hover:text-white">✕</button>
+            <div class="mb-6">
+                <div class="text-4xl font-bold bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent mb-2">
+                    BLRB
+                </div>
+                <h2 class="font-bold mb-2 text-lg uppercase">Get In Touch</h2>
+                <p class="text-sm text-gray-400">Have a question, feedback, or idea? Drop us a line and we'll get back to you.</p>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="space-y-4">
+                <input 
+                    type="text" 
+                    id="contactName" 
+                    name="contactName" 
+                    class="w-full bg-gray-800 border border-gray-600 px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                    placeholder="Your Name"
+                />
+                <input 
+                    type="email" 
+                    id="contactEmail" 
+                    name="contactEmail" 
+                    class="w-full bg-gray-800 border border-gray-600 px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors"
+                    placeholder="Email Address"
+                />
+                <textarea 
+                    id="contactMessage" 
+                    name="contactMessage" 
+                    rows="4"
+                    class="w-full bg-gray-800 border border-gray-600 px-4 py-3 text-white placeholder-gray-500 focus:border-primary focus:outline-none transition-colors resize-none"
+                    placeholder="Your Message"
+                ></textarea>
+                <button class="w-full bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-3 px-6 uppercase tracking-wide transition-all">
+                    SEND MESSAGE
+                </button>
+            </div>
+        </div>
+        </div>
+    </div>
+
     <!-- BLRB Bottom Sheet -->
     <div id="blrbSheet" class="bottom-sheet fixed inset-x-0 bottom-0 z-50 bg-gray-900 border-t border-gray-700 max-h-[80vh] overflow-y-auto">
         <div class="sticky top-0 bg-gray-900 border-b border-gray-700 p-4 flex items-center justify-between">
@@ -448,6 +574,26 @@
             document.body.style.overflow = 'auto';
         }
         
+        function openAbout() {
+            document.getElementById('aboutPopup').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeAbout() {
+            document.getElementById('aboutPopup').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function openContact() {
+            document.getElementById('contactPopup').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeContact() {
+            document.getElementById('contactPopup').classList.remove('open');
+            document.body.style.overflow = 'auto';
+        }
+        
         function openBlrb(storyId) {
             document.getElementById('blrbSheet').classList.add('open');
             document.getElementById('backdrop').style.opacity = '1';
@@ -481,6 +627,8 @@
             if (e.key === 'Escape') {
                 closeSubscribe();
                 closeBlrb();
+                closeAbout();
+                closeContact();
             }
         });
         
