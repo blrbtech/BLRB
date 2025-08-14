@@ -454,6 +454,14 @@
             document.getElementById('backdrop').style.pointerEvents = 'all';
             document.body.style.overflow = 'hidden';
             
+            // Track BLRB button clicks
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'blrb_clicked', {
+                    event_category: 'engagement',
+                    event_label: storyId
+                });
+            }
+            
             // Update content based on story
             console.log('Opening BLRB for:', storyId);
         }
@@ -914,6 +922,14 @@
             // Check if this lane is already selected
             if (newLane === currentLane) {
                 return;
+            }
+            
+            // Track lane navigation
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'lane_changed', {
+                    event_category: 'navigation',
+                    event_label: newLane
+                });
             }
             
             // Calculate distance for animation duration
