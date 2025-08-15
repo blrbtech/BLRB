@@ -2,6 +2,28 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Collaborator Background & Skillsets
+
+### Creative & Technical Expertise
+- **Adobe Creative Suite**: Expert-level proficiency in Photoshop, Illustrator, After Effects (used weekly in professional work)
+- **3D & Motion Graphics**: Advanced Blender skills for modeling, animation, texturing, camera work
+- **Video Production**: DaVinci Resolve for editing and color grading
+- **Photography**: Personal passion project, understanding of composition and visual storytelling
+- **Versatile Output**: Professional experience ranging from product graphics and 3D renders to stadium motion graphics
+
+### Learning & Thinking Style
+- **Self-Taught Methodology**: 100% autodidactic across all technical skills with no formal education
+- **First Principles Thinking**: Natural pattern recognition across complex systems, understands underlying logic rather than just surface operations
+- **Cross-Platform Analogies**: Bridges concepts between different software (e.g., Photoshop layers → database schemas → system architecture)
+- **Systems Visualization**: Intuitive grasp of how complex systems interconnect and data flows between components
+- **Curiosity-Driven Learning**: Genuine interest leads to deep understanding of tools and concepts
+
+### Values & Approach
+- **Net Positive Impact**: Non-negotiable requirement that all projects contribute positively to society
+- **Financial Freedom Goal**: Building systems and products to achieve independence and creative control
+- **Rapid Iteration**: Comfortable with experimentation, learning through building, and adapting quickly
+- **Confidence with Ambiguity**: "Figure it out as you go" mentality rather than requiring perfect roadmaps
+
 ## Project Overview
 
 BLRB (newsletter for builders) is a tech newsletter website project that has been extensively developed as a sophisticated single-page application. The project features a dark theme design with blue/cyan gradient branding, dynamic content lanes, smooth animations, and mobile-first responsive design.
@@ -20,7 +42,7 @@ Both files feature:
   - Mobile swipe gestures between lanes
   - Bottom sheet BLRB explainer panels
   - Professional subscribe popup with form fields
-  - Clean hamburger menu with navigation
+  - Clean hamburger menu with About BLRB and Contact popups
   - Smooth animations and transitions
   - Modern article card design with sharp corners
 
@@ -46,9 +68,11 @@ Both files feature:
 4. **Mobile Swipe Support** - Touch gesture navigation between lanes
 5. **BLRB Bottom Sheets** - Detailed story explainer panels
 6. **Professional Subscribe Form** - Name/email fields with refined typography
-7. **Hamburger Menu** - Clean dropdown with Newsletter/About/Contact
-8. **Responsive Design** - Mobile-first with desktop enhancements
-9. **Analytics Tracking** - Google Analytics 4 with custom events for user behavior
+7. **Hamburger Menu** - Clean dropdown with Newsletter/About BLRB/Contact popups
+8. **About BLRB Popup** - Complete company explanation with workflow details
+9. **Contact Form Popup** - Name/email/message form for user inquiries
+10. **Responsive Design** - Mobile-first with desktop enhancements
+11. **Analytics Tracking** - Google Analytics 4 with custom events for user behavior
 
 ## File Structure & Status
 
@@ -120,6 +144,10 @@ F:\BLRB\3_WEBSITE/
 - `openBlrb(storyId)` - Opens bottom sheet explainer
 - `openSubscribe()` - Opens newsletter signup popup
 - `closeSubscribe()` - Closes newsletter signup popup
+- `openAbout()` - Opens About BLRB popup
+- `closeAbout()` - Closes About BLRB popup
+- `openContact()` - Opens Contact form popup
+- `closeContact()` - Closes Contact form popup
 - `toggleDropdown()` - Handles hamburger menu dropdown
 - `setupMenuHandlers()` - Initializes navigation menu system
 
@@ -130,6 +158,7 @@ F:\BLRB\3_WEBSITE/
 - ✅ Lanes properly span full width on mobile without scrolling
 - ✅ Today's Hits carousel with optimized gradients works
 - ✅ Smart arrows hide/show based on scroll position
+- ✅ Today's Hits arrows properly centered on video thumbnails across all screen sizes
 - ✅ Today's Hits click behavior: thumbnails inactive, headlines/text link out, BLRB opens sheets
 - ✅ Article cards have modern layout with right-side 9:16 thumbnails
 - ✅ All elements have sharp corners (no rounded borders)
@@ -137,6 +166,12 @@ F:\BLRB\3_WEBSITE/
 - ✅ Hamburger menu dropdown opens/closes
 - ✅ Newsletter menu item opens subscribe popup
 - ✅ Subscribe popup with name/email form works
+- ✅ About BLRB popup opens with complete company details
+- ✅ Contact popup opens with name/email/message form
+- ✅ All popups have consistent gradient border styling
+- ✅ All popups optimized for mobile with responsive padding and sizing
+- ✅ About BLRB popup goes full-screen on mobile for better content readability
+- ✅ Escape key closes all popups
 - ✅ All click-outside-to-close functionality works
 - ✅ Responsive design scales properly
 
@@ -186,6 +221,22 @@ ls F:\BLRB\3_WEBSITE
 
 ## Recent Major Updates
 
+### August 15, 2025 - Mobile UX Optimization & Arrow Positioning Fix
+- **Mobile Popup Optimization**: All three popups (Newsletter, About, Contact) now have responsive padding and sizing for mobile
+- **About BLRB Full-Screen Mobile**: About popup goes full-screen on mobile for better content readability and scrolling
+- **Responsive Form Elements**: Smaller text sizes, tighter spacing, and optimized input fields for mobile devices
+- **Today's Hits Arrow Fix**: Resolved arrow positioning issue where arrows would slide down on desktop responsive testing
+- **Perfect Arrow Centering**: Arrows now positioned relative to aspect-video div for consistent centering across all screen sizes
+- **Enhanced Mobile Experience**: Significant improvement in mobile UX with properly sized popups and navigation elements
+
+### August 14, 2025 - Hamburger Menu Popups & Navigation Enhancement
+- **About BLRB Popup**: Complete company explanation with workflow, target audience, and philosophy sections
+- **Contact Form Popup**: Professional contact form with name, email, and message fields
+- **Hamburger Menu Update**: Changed "About Us" to "About BLRB", converted all menu items from anchor links to popup triggers
+- **Consistent Popup Styling**: All three popups (Newsletter, About, Contact) share gradient border and layout consistency
+- **Enhanced JavaScript**: Added `openAbout()`, `closeAbout()`, `openContact()`, `closeContact()` functions with escape key support
+- **User Experience**: Complete navigation system with professional forms and detailed information architecture
+
 ### August 14, 2025 - Analytics Integration & Newsletter UX Enhancements
 - **Google Analytics 4**: Integrated GA4 tracking (G-8NLHDPTR6M) with custom events
 - **Newsletter Popup Redesign**: Updated copy to "People Who Make Things Happen" with action-focused messaging
@@ -210,4 +261,4 @@ ls F:\BLRB\3_WEBSITE
 - **Integration**: Newsletter menu item connects to subscribe popup
 
 ---
-*Last updated: August 14, 2025 - Analytics integration and newsletter UX optimization complete*
+*Last updated: August 15, 2025 - Mobile UX optimization and Today's Hits arrow positioning perfected*
