@@ -593,6 +593,23 @@
             document.body.style.overflow = 'auto';
         }
         
+        // Toggle ads functionality
+        function toggleAds() {
+            showAds = !showAds;
+            const toggleBtn = document.getElementById('adsToggleBtn');
+            
+            if (showAds) {
+                toggleBtn.textContent = 'Hide Ads';
+            } else {
+                toggleBtn.textContent = 'Show Ads';
+            }
+            
+            // Reload all lanes with new ad state
+            preloadAllLanes();
+            
+            console.log('Ads toggled:', showAds ? 'ON' : 'OFF');
+        }
+        
         function openBlrb(storyId) {
             document.getElementById('blrbSheet').classList.add('open');
             document.getElementById('backdrop').style.opacity = '1';
@@ -639,6 +656,63 @@
             }
         }, 5000);
         
+        // Ad slot toggle state
+        let showAds = true;
+        
+        // Ad content for each lane
+        const laneAds = {
+            'AI': {
+                lane: 'AI',
+                source: 'SPONSORED',
+                title: 'Deploy AI Models 10x Faster with ModelOps Pro',
+                blurb: 'From training to production in minutes. Scale ML infrastructure automatically with zero DevOps overhead.',
+                id: 'ad-ai-modelops',
+                isAd: true,
+                cta: 'Start Free Trial',
+                link: '#'
+            },
+            'TECH': {
+                lane: 'TECH',
+                source: 'SPONSORED',
+                title: 'CloudScale: Enterprise Infrastructure That Scales With You',
+                blurb: 'Handle millions of users without breaking a sweat. Built for startups that think big.',
+                id: 'ad-tech-cloudscale',
+                isAd: true,
+                cta: 'Get Started',
+                link: '#'
+            },
+            'PRODUCTS': {
+                lane: 'PRODUCTS',
+                source: 'SPONSORED',
+                title: 'BuildKit: Ship Products 5x Faster',
+                blurb: 'Pre-built components, automated testing, and deployment pipelines. Stop reinventing the wheel.',
+                id: 'ad-products-buildkit',
+                isAd: true,
+                cta: 'View Demo',
+                link: '#'
+            },
+            'DEV': {
+                lane: 'DEV',
+                source: 'SPONSORED',
+                title: 'CodeMentor AI: Your Senior Developer in the Cloud',
+                blurb: 'Code reviews, architecture suggestions, and bug fixes powered by AI trained on millions of repos.',
+                id: 'ad-dev-codementor',
+                isAd: true,
+                cta: 'Try Now',
+                link: '#'
+            },
+            'CRYPTO': {
+                lane: 'CRYPTO',
+                source: 'SPONSORED',
+                title: 'CryptoAPI: Build DeFi Apps Without the Complexity',
+                blurb: 'One API for all blockchains. Handle transactions, smart contracts, and DeFi protocols seamlessly.',
+                id: 'ad-crypto-api',
+                isAd: true,
+                cta: 'Start Building',
+                link: '#'
+            }
+        };
+
         // Story data for each lane
         const laneStories = {
             'AI': [
@@ -1016,22 +1090,44 @@
         
         // Generate story HTML
         function generateStoryHTML(story) {
-            return `
-                <article class="bg-gray-900/50 p-4 border border-gray-800 hover:border-gray-700 transition-colors">
-                    <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
-                        <span class="text-accent uppercase font-medium">${story.lane}</span>
-                        <span>•</span>
-                        <span>${story.source}</span>
-                    </div>
-                    <h3 class="font-bold text-base mb-3 leading-tight">${story.title}</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed mb-3">${story.blurb}</p>
-                    <div class="flex justify-start">
-                        <button onclick="openBlrb('${story.id}')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-1.5 px-3 text-xs uppercase tracking-wide transition-all">
-                            BLRB
-                        </button>
-                    </div>
-                </article>
-            `;
+            if (story.isAd) {
+                return `
+                    <article class="bg-gray-900/60 p-4 border border-gray-700/70 hover:border-gray-600 transition-colors relative">
+                        <div class="absolute top-2 right-2 bg-gray-600 text-gray-200 text-xs font-medium px-2 py-0.5 uppercase tracking-wide">
+                            AD
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+                            <span class="text-accent uppercase font-medium">${story.lane}</span>
+                            <span>•</span>
+                            <span>${story.source}</span>
+                        </div>
+                        <h3 class="font-bold text-base mb-3 leading-tight">${story.title}</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-3">${story.blurb}</p>
+                        <div class="flex justify-start">
+                            <button onclick="window.open('${story.link}', '_blank')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-1.5 px-3 text-xs uppercase tracking-wide transition-all">
+                                ${story.cta}
+                            </button>
+                        </div>
+                    </article>
+                `;
+            } else {
+                return `
+                    <article class="bg-gray-900/50 p-4 border border-gray-800 hover:border-gray-700 transition-colors">
+                        <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+                            <span class="text-accent uppercase font-medium">${story.lane}</span>
+                            <span>•</span>
+                            <span>${story.source}</span>
+                        </div>
+                        <h3 class="font-bold text-base mb-3 leading-tight">${story.title}</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-3">${story.blurb}</p>
+                        <div class="flex justify-start">
+                            <button onclick="openBlrb('${story.id}')" class="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white font-black py-1.5 px-3 text-xs uppercase tracking-wide transition-all">
+                                BLRB
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }
         }
         
         // Preload all lane content
@@ -1040,7 +1136,17 @@
                 const stories = laneStories[laneName] || [];
                 const laneElement = document.getElementById(`lane-${laneName}`);
                 if (laneElement) {
-                    laneElement.innerHTML = stories.map(generateStoryHTML).join('');
+                    let content = [];
+                    
+                    // Add ad as first item if ads are enabled
+                    if (showAds && laneAds[laneName]) {
+                        content.push(laneAds[laneName]);
+                    }
+                    
+                    // Add regular stories
+                    content = content.concat(stories);
+                    
+                    laneElement.innerHTML = content.map(generateStoryHTML).join('');
                 }
             });
         }
